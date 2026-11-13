@@ -246,10 +246,32 @@ p{margin:0}
 .trophy.won{color:var(--chalk);border-color:var(--gold)}
 .trophy b{display:block;font-family:var(--f-display);font-size:14px;color:var(--gold)}
 
+/* tutorial: a lit-up spotlight on one thing, the rest dimmed and not tappable, a big two-language speech card */
+.tut-shade{position:fixed;inset:0;z-index:70;background:rgba(5,10,22,.78);pointer-events:none}
+.tut-spot{position:fixed;z-index:71;border-radius:16px;pointer-events:none;box-shadow:0 0 0 4px var(--score),0 0 0 9999px rgba(5,10,22,.74);transition:left .25s,top .25s,width .25s,height .25s}
+.tut-block{position:fixed;z-index:72;background:transparent}
+.tut-card{box-sizing:border-box;position:fixed;z-index:73;width:min(540px,calc(100vw - 24px));max-height:calc(100vh - 16px);overflow:hidden;background:var(--panel);border:3px solid var(--score);border-radius:18px;padding:16px 18px;display:grid;gap:10px;color:var(--chalk);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.tut-card{display:flex!important;flex-direction:column}
+.tut-card .tbody{display:grid;gap:8px;overflow:auto;min-height:0;flex:1 1 auto;overscroll-behavior:contain}
+.tut-card .trow{flex:none}
+.tut-card .tstep{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tut-card .ten{font-size:22px;font-weight:700;line-height:1.3}
+.tut-card .tzh{font-family:var(--f-zh);font-size:21px;font-weight:700;line-height:1.4;color:#E6EEF8}
+.tut-card .twait{color:var(--score);font-weight:700;font-size:17px}
+.tut-card .trow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tut-card .trow .grow{flex:1}
+.tut-card button{min-height:52px;padding:8px 16px;border-radius:12px;font-weight:700;font-size:18px;background:var(--panel2);border:1px solid var(--line)}
+.tut-card button.go{background:var(--score);color:var(--score-ink);border-color:var(--score)}
+.tut-card button.skip{background:none;border:0;color:var(--muted);font-size:15px;min-height:44px;padding:6px 8px;text-decoration:underline}
+.tut-card .tlangs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tut-card .tlangs button{min-height:72px;font-size:24px}
+.tut-card .tlangs button[aria-pressed="true"]{background:var(--score);color:var(--score-ink)}
+.tut-card.tight{padding:10px 12px;gap:6px}.tut-card.tight .tstep{display:none}.tut-card.tight .ten{font-size:18px}.tut-card.tight .tzh{font-size:17px}.tut-card.tight .twait{font-size:15px}.tut-card.tight button{min-height:44px;font-size:15px;padding:4px 10px}.tut-card.tight .tlangs button{min-height:56px;font-size:20px}
+@media (max-width:760px){.tut-card{padding:12px 14px;gap:8px}.tut-card .ten{font-size:19px}.tut-card .tzh{font-size:18px}.tut-card button{min-height:48px;font-size:16px;padding:6px 12px}}
 .modal{position:fixed;inset:0;background:rgba(5,10,20,.72);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal .box{background:var(--panel);border:2px solid var(--score);border-radius:18px;padding:20px;max-width:460px;display:flex;flex-direction:column;gap:14px;text-align:center}
 .modal h3{font-size:26px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 16px;z-index:60;max-width:calc(100% - 32px);font-size:16px}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 16px;z-index:60;max-width:calc(100% - 32px);font-size:16px}
 
 @media (max-width:760px){
   .pitch{overflow:visible;border:0}
@@ -284,6 +306,7 @@ p{margin:0}
   .talk .key{font-size:20px;padding:2px 12px}
   .tips{font-size:14px}
   #app{gap:10px}
+  .toast{bottom:auto;top:calc(12px + env(safe-area-inset-top,0px))}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -319,6 +342,7 @@ p{margin:0}
       <div class="homegrid">
         <button class="btn primary wide" id="bResume"><span>Resume <span class="zh">繼續</span></span><small id="resumeSub"></small></button>
         <button class="btn" id="bRestart"><span>Restart <span class="zh">重新開始</span></span><small>Pick a sport and level · 揀運動同關卡</small></button>
+        <button class="btn" id="bTut"><span>Tutorial <span class="zh">教學</span></span><small>Learn to play, step by step · 一步一步學點玩</small></button>
         <button class="btn" id="bCup"><span>Cups <span class="zh">盃賽</span></span><small id="cupSub"></small></button>
         <button class="btn" id="bHow"><span>How to play <span class="zh">玩法</span></span><small>Rules and tips for family · 規則同家人貼士</small></button>
         <button class="btn" id="bStore"><span>Store <span class="zh">商店</span></span><small>Balls and new fields · 新波同新球場</small></button>
@@ -415,6 +439,7 @@ p{margin:0}
     <!-- HOW TO PLAY -->
     <section class="screen" id="sc-how" hidden>
       <div class="sec-title"><h2>How to play</h2><span class="zh">玩法</span></div>
+      <div><button class="btn primary" id="bTut2"><span>Start the tutorial <span class="zh">開始教學</span></span><small>A guided first game, with a welcome gift · 跟住一步步玩，仲有見面禮</small></button></div>
       <div class="panel steps">
         <div class="step"><div class="n">1</div><p>Pick a sport and a level.<span class="zh">揀一種運動同一個關卡。</span></p></div>
         <div class="step"><div class="n">2</div><p>Read the word on the ball. Tap <b>Hear it</b> to hear it first.<span class="zh">睇波上面嘅字。㩒「聽一次」可以先聽。</span></p></div>
@@ -805,32 +830,43 @@ function gradeOf(p){const [g,s]=THRESH[S.settings.strict]||THRESH.gentle;return 
 function makeWebDictation(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;
   const H={p:[],f:[],s:[]};const emit=(k,v)=>H[k].forEach(h=>{try{h(v);}catch(e){}});
   const APPLE=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.vendor||'').startsWith('Apple');
-  const ZH=APPLE?['zh-HK','yue-Hant-HK']:['yue-Hant-HK','zh-HK'];let rec=null,st='idle',stopping=false,endReason=null,stopResolve=null,zhCode=null;
+  const ZH=APPLE?['zh-HK','yue-Hant-HK']:['yue-Hant-HK','zh-HK'];let rec=null,st='idle',stopping=false,endReason=null,stopResolve=null,zhCode=null,tok=0;
   /* Ask for the microphone once and keep it. Browsers forget "Allow" for files opened from the Desktop,
      so starting recognition straight from the microphone would ask on every press; recognising from a
      microphone track the page already holds does not ask again (Chrome/Edge 133+). */
-  let micTrack=null,micPromise=null,trackOk=location.protocol==='file:'&&!APPLE;
-  function getTrack(){if(micTrack&&micTrack.readyState==='live')return Promise.resolve(micTrack);
+  let micTrack=null,micPromise=null,trackOk=location.protocol==='file:'&&!APPLE,trackMiss=0,meter=null,mTimer=null;
+  function getTrack(){if(!trackOk)return Promise.resolve(null);if(micTrack&&micTrack.readyState==='live')return Promise.resolve(micTrack);
     const md=navigator.mediaDevices;if(!trackOk||!md||!md.getUserMedia)return Promise.resolve(null);
     if(!micPromise)micPromise=md.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}).then(sm=>{const t=sm.getAudioTracks()[0]||null;micTrack=t;
         if(t&&t.addEventListener)t.addEventListener('ended',()=>{if(micTrack===t){micTrack=null;micPromise=null;}});return t;})
       .catch(e=>{micPromise=null;const n=e&&e.name;if(n==='NotAllowedError'||n==='SecurityError'){api.lastError='not-allowed';throw {code:'not_granted',message:n};}
         if(n==='NotFoundError'||n==='NotReadableError'||n==='OverconstrainedError'){api.lastError='audio-capture';throw {code:'upstream_error',message:n};}return null;});
     return micPromise;}
+  function level(){if(!meter)return -1;try{meter.an.getFloatTimeDomainData(meter.buf);let m=0;for(let k=0;k<meter.buf.length;k++){const a=Math.abs(meter.buf[k]);if(a>m)m=a;}return m;}catch(e){return -1;}}
+  function ensureMeter(t){if(!t||(meter&&meter.t===t))return;try{const C=window.AudioContext||window.webkitAudioContext;const c=meter&&meter.c||new C();const src=c.createMediaStreamSource(new MediaStream([t]));const an=c.createAnalyser();an.fftSize=1024;src.connect(an);if(c.state==='suspended'&&c.resume)c.resume().catch(()=>{});meter={c,an,buf:new Float32Array(1024),t};}catch(e){meter=null;}}
   const mapErr=e=>({'not-allowed':'not_granted','service-not-allowed':'not_granted','language-not-supported':'unavailable','network':'upstream_error','audio-capture':'upstream_error','aborted':'stopped','no-speech':'ended'})[e]||'upstream_error';
-  const api={lastError:null,
-    start(o){if(st!=='idle')return Promise.resolve();api.lastError=null;st='starting';emit('s',{state:'starting'});const want=o&&o.language;
-      return new Promise((res,rej)=>{getTrack().then(track=>{if(want&&want.startsWith('zh')){const i=Math.max(0,zhCode?ZH.indexOf(zhCode):0);begin(ZH[i],res,rej,i,track);}else begin('en-US',res,rej,-1,track);},
-        err=>{st='idle';emit('s',{state:'idle',reason:err.code});rej(err);});});},
-    stop(){if(!rec||st==='idle')return Promise.resolve();stopping=true;st='finishing';emit('s',{state:'finishing'});const r=rec;
+  const api={lastError:null,info:null,
+    start(o){if(st!=='idle')return Promise.resolve();api.lastError=null;st='starting';const my=++tok;api.info={audio:false,sound:false,speech:false,results:0,peak:-1,track:false};emit('s',{state:'starting'});const want=o&&o.language;
+      return new Promise((res,rej)=>{const go=track=>{if(my!==tok){rej({code:'cancelled',ready:!!track});return;}if(want&&want.startsWith('zh')){const i=Math.max(0,zhCode?ZH.indexOf(zhCode):0);begin(ZH[i],res,rej,i,track);}else begin('en-US',res,rej,-1,track);};
+        const fail=err=>{if(my!==tok){rej({code:'cancelled'});return;}st='idle';emit('s',{state:'idle',reason:err.code});rej(err);};
+        /* start straight away inside the key press or tap when nothing has to be asked first (Safari wants that) */
+        const md=navigator.mediaDevices;if(!trackOk||!md||!md.getUserMedia)go(null);else if(micTrack&&micTrack.readyState==='live')go(micTrack);else getTrack().then(go,fail);});},
+    pending(){return st==='starting'&&!rec;},
+    stop(){if(st==='starting'&&!rec){tok++;st='idle';emit('s',{state:'idle',reason:'stopped'});return Promise.resolve();}
+      if(!rec||st==='idle')return Promise.resolve();stopping=true;st='finishing';emit('s',{state:'finishing'});const r=rec;
       return new Promise(res=>{stopResolve=res;try{r.stop();}catch(e){}setTimeout(()=>{if(stopResolve){try{r.abort();}catch(e){}const f=stopResolve;stopResolve=null;finish(r,'stopped');f();}},3000);});},
     active(){return st!=='idle';},
     onPartial(h){H.p.push(h);return()=>{};},onFinal(h){H.f.push(h);return()=>{};},onState(h){H.s.push(h);return()=>{};}};
-  function finish(r,reason){if(rec!==r)return;rec=null;st='idle';stopping=false;endReason=null;emit('s',{state:'idle',reason});if(stopResolve){const f=stopResolve;stopResolve=null;f();}}
+  function finish(r,reason){if(rec!==r)return;clearInterval(mTimer);mTimer=null;const I=api.info;
+    /* the browser got sound but never gave words, twice, while listening to the held microphone: go back to plain listening */
+    if(I&&I.track){if(I.results)trackMiss=0;else if((I.speech||I.peak>=.06)&&(!api.lastError||api.lastError==='no-speech'||api.lastError==='aborted')&&++trackMiss>=2)trackOk=false;}
+    rec=null;st='idle';stopping=false;endReason=null;emit('s',{state:'idle',reason});if(stopResolve){const f=stopResolve;stopResolve=null;f();}}
   function begin(lang,resolve,reject,zi,track){let r;try{r=new SR();}catch(e){st='idle';reject({code:'unavailable',message:String(e)});return;}
-    rec=r;r.lang=lang;r.continuous=true;r.interimResults=true;r.maxAlternatives=3;let started=false;
+    rec=r;r.lang=lang;r.continuous=true;r.interimResults=true;r.maxAlternatives=3;let started=false;const I=api.info||(api.info={});I.track=!!(track&&track.readyState==='live');
+    ensureMeter(track||(micTrack&&micTrack.readyState==='live'?micTrack:null));clearInterval(mTimer);mTimer=meter?setInterval(()=>{const v=level();if(v>I.peak)I.peak=v;},80):null;
+    r.onaudiostart=()=>{I.audio=true;};r.onsoundstart=()=>{I.sound=true;};r.onspeechstart=()=>{I.sound=true;I.speech=true;};
     r.onstart=()=>{started=true;st='listening';if(zi>=0)zhCode=lang;emit('s',{state:'listening'});resolve();};
-    r.onresult=ev=>{let interim='';for(let i=ev.resultIndex;i<ev.results.length;i++){const res=ev.results[i];
+    r.onresult=ev=>{I.results++;I.sound=true;let interim='';for(let i=ev.resultIndex;i<ev.results.length;i++){const res=ev.results[i];
         if(res.isFinal){const alts=[];for(let j=0;j<res.length;j++){const t=(res[j].transcript||'').trim();if(t)alts.push(t);}if(alts.length)emit('f',{text:' '+alts[0],alts});}
         else if(res.length)interim+=res[0].transcript;}
       emit('p',{text:interim.trim()});};
@@ -1107,7 +1143,7 @@ function drawStill(id,o,label,ball){const sc=sceneFor(id);sc.set(o);sc.label=lab
 /* ======================= SCREENS ======================= */
 const SCREENS=['home','sport','levels','play','done','store','how','progress','family','cup'];
 let screen='home',playing=false;
-function show(id){if(screen==='play'&&id!=='play')leavePlay();screen=id;SCREENS.forEach(s=>$('sc-'+s).hidden=s!==id);$('homeBtn').hidden=id==='home';window.scrollTo(0,0);
+function show(id){if(screen==='play'&&id!=='play')leavePlay();screen=id;SCREENS.forEach(s=>$('sc-'+s).hidden=s!==id);{const a=document.activeElement;if(a&&a!==document.body&&a.offsetParent===null&&a.blur)a.blur();}$('homeBtn').hidden=id==='home';window.scrollTo(0,0);
   if(id==='home')renderHome();if(id==='sport')renderSport();if(id==='levels')renderLevels();if(id==='store')renderStore();if(id==='progress')renderProgress();if(id==='family')renderFamily();if(id==='cup')renderCup();
   if(id!=='play'&&id!=='home'&&id!=='cup')stopLoop();}
 $('homeBtn').onclick=()=>show('home');
@@ -1123,6 +1159,7 @@ function streak(){let n=0;const d=new Date();if(!(S.days[todayKey(d)]&&S.days[to
 function renderHome(){renderWallet();const sc=drawStill('heroCv',sceneOpts(),'',{x:500,y:432,r:34,alpha:1});startLoop(sc);
   const ds=dayStat();const g=S.settings.goal;$('todayTxt').textContent=`${ds.t} of ${g} tries · ${ds.g} goals · 今日試咗 ${ds.t} 次`;$('todayBar').style.width=Math.min(100,ds.t/g*100)+'%';
   const st=streak();$('streakTxt').textContent=st?`${st} day${st>1?'s':''} in a row · 連續 ${st} 日`:'';
+  if(S.current&&S.current.kind==='tutorial'){S.current=null;}
   const cur=S.current;if(cur){const nm=cur.kind==='cup'?(()=>{const d=cupDef(cur.cupId);return {en:d.en,zh:d.zh};})():cur.kind==='tough'?{en:'Practice words',zh:'練習難字'}:levelName(cur.stage,cur.level);
     const sp=SPORTS.find(s=>s.id===cur.sport);$('resumeSub').textContent=`${sp.en} ${sp.zh} · ${nm.en} ${nm.zh} · ball ${Math.min(cur.idx+1,cur.items.length)} of ${cur.items.length}`;}
   else{const n=firstOpenLevel();const nm=levelName(n.stage,n.level);$('resumeSub').textContent=`Start: ${nm.en} · 開始：${nm.zh}`;}
@@ -1160,7 +1197,7 @@ let P_={};// current run
 function beginLevel(stage,level){const items=getItems(stage,level,S.lang);startPlay({kind:'level',stage,level,items,idx:0,results:items.map(()=>null),tries:items.map(()=>0),sport:S.sport,lang:S.lang},false);}
 function startPlay(cur,resumed){if(P_&&P_.autoNext)clearTimeout(P_.autoNext);if(!Array.isArray(cur.hist)||cur.hist.length!==cur.items.length)cur.hist=cur.items.map((x,i)=>cur.results&&cur.results[i]?[cur.results[i]]:[]);S.current=cur;save();P_={cur,sessionStart:Date.now(),restShown:false,busy:false,listening:false,heard:'',partial:'',attempts:0,lastHeardAt:0,startAt:0,tap:false,coinsThisLevel:0};
   playing=true;keepAwake(true);show('play');const sc=sceneFor('cv');sc.set(Object.assign(sceneOpts(),{sport:cur.sport,place:cur.kind==='cup'?cupDef(cur.cupId).place:S.equip.place,night:cur.kind==='cup'?!!cupDef(cur.cupId).night:!!S.equip.night}));resetDyn();startLoop(sc);
-  const nm=cur.kind==='cup'?cupDef(cur.cupId).label:cur.kind==='tough'?{en:'Practice words',zh:'練習難字'}:levelName(cur.stage,cur.level);
+  const nm=cur.kind==='tutorial'?{en:'Tutorial',zh:'教學'}:cur.kind==='cup'?cupDef(cur.cupId).label:cur.kind==='tough'?{en:'Practice words',zh:'練習難字'}:levelName(cur.stage,cur.level);
   $('pTitle').textContent=`${nm.en} · ${nm.zh}`;showBall();if(resumed)toast('Welcome back! 歡迎返嚟！');}
 function leavePlay(){clearTimeout(P_.autoNext);playing=false;keepAwake(false);P_.listening&&stopListening(true);stopSpeak();$('banner').hidden=true;}
 function curItem(){return P_.cur.items[P_.cur.idx];}
@@ -1175,11 +1212,11 @@ function showBall(){const c=P_.cur;clearTimeout(P_.autoNext);P_.last=null;if(P_.
   $('banner').hidden=true;$('heard').textContent='';$('judgeBox').hidden=micUsable(iLang());if(!micUsable(iLang()))$('judgeLbl').textContent='Coach: after he says it, tap one. 教練：講完之後㩒一個。';$('nextBtn').hidden=true;P_.busy=false;P_.attempts=c.tries[c.idx]||0;setTalk('idle');renderKicks();
   const speakOk=canSpeak(iLang());['cHear','cSlow','cTog'].forEach(id=>$(id).disabled=!speakOk);
   if(!speakOk&&iLang()==='zh'){$('heard').textContent='No Cantonese voice on this device. Family can read it to him. 呢部機冇廣東話聲，請家人讀一次。';}
-  if(S.settings.modelFirst&&speakOk&&!(c.tries[c.idx]))setTimeout(()=>{if(screen==='play'&&curItem()===it&&!P_.listening)speakModel(1);},450);}
+  if(S.settings.modelFirst&&speakOk&&!(c.tries[c.idx])&&!TUT)setTimeout(()=>{if(screen==='play'&&curItem()===it&&!P_.listening)speakModel(1);},450);}
 function setTalk(st){const b=$('talkBtn');b.classList.toggle('listening',st==='listening');b.classList.toggle('busy',st==='busy');
   const coach=!micUsable(iLang());
   $('talkTxt').innerHTML=st==='listening'?(coach?'Saying it… let go when done<br><span class="zh">講緊…講完放手</span>':'Listening… let go when done<br><span class="zh">聽緊…講完放手</span>'):st==='busy'?'Checking…<br><span class="zh">睇吓…</span>':'Hold and say it<br><span class="zh">按住，講出嚟</span>';}
-async function speakModel(mode){const it=curItem();if(!it)return;const lang=iLang();const beats=[...$('tBeats').children];
+async function speakModel(mode){const it=curItem();if(!it)return;tutEvent('hear');const lang=iLang();const beats=[...$('tBeats').children];
   if(mode===1){await speak(it.text,lang,.85);return;}
   const rate=mode===2?.6:.7;const n=beats.length;let i=0;const est=(lang==='zh'?.55:.42)/rate*1000;let timer=null;
   if(n){beats.forEach(b=>b.classList.remove('on'));timer=setInterval(()=>{beats.forEach((b,j)=>b.classList.toggle('on',j===i));i++;if(i>n){clearInterval(timer);beats.forEach(b=>b.classList.remove('on'));}},est);}
@@ -1193,9 +1230,11 @@ function pressStart(){if(screen!=='play'||P_.busy)return;ac();if(P_.listening){i
   const lang=iLang();stopSpeak();P_.heard='';P_.partial='';P_.alts=[];P_.pressAt=performance.now();P_.listening=true;P_.tap=false;P_.lastHeardAt=0;P_.startAt=performance.now();
   $('judgeBox').hidden=micUsable(lang)?true:false;$('banner').hidden=true;setTalk('listening');
   if(micUsable(lang)){const opts=lang==='zh'?{language:'zh-HK'}:{language:'en'};if(!IN_CLAUDE&&!window.__micHint){window.__micHint=1;toast('The browser will ask once to use the microphone. Choose Allow. 瀏覽器會問一次用唔用咪高峰，揀「允許」。',6000);}
-    dict.start(opts).catch(err=>{const code=err&&err.code;P_.listening=false;setTalk('idle');
+    dict.start(opts).catch(err=>{const code=err&&err.code;
+      if(code==='cancelled'){if(!P_.listening&&err.ready&&screen==='play')$('heard').textContent='The microphone is ready. Hold SPACE (or the yellow button) and say the word. 咪高峰準備好喇，按住空白鍵（或者黃色掣）講。';return;}
+      P_.listening=false;setTalk('idle');
       if(code==='unavailable'){dictLangFail[lang]=true;$('heard').textContent=lang==='zh'?'The game can\'t listen in Cantonese here, so family will be the coach. 呢度聽唔到廣東話，請家人做教練。':'Listening isn\'t available here, so family will be the coach. 請家人做教練。';showJudge();}
-      else if(code==='not_granted'&&dict&&dict.lastError==='service-not-allowed'){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent=/iPhone|iPad|iPod/.test(navigator.userAgent)?'Speech recognition is off on this iPhone. Turn on Settings › General › Keyboard › Enable Dictation, then reload. For now the coach can judge. 請喺設定開「聽寫」，再重新載入。':'Speech recognition is turned off in this browser. The coach can judge for now. 呢個瀏覽器冇開語音辨識，請教練判斷。';showJudge();}
+      else if(code==='not_granted'&&dict&&dict.lastError==='service-not-allowed'){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent=(/Macintosh/.test(navigator.userAgent)&&!/Chrome|Chromium|Edg|Firefox/.test(navigator.userAgent))?'Speech recognition is off on this Mac. Turn on Dictation (Apple menu › System Settings › Keyboard › Dictation) and reload, or open the game in Google Chrome. For now the coach can judge. 請喺系統設定開「聽寫」，或者用Chrome開。':/iPhone|iPad|iPod/.test(navigator.userAgent)?'Speech recognition is off on this iPhone. Turn on Settings › General › Keyboard › Enable Dictation, then reload. For now the coach can judge. 請喺設定開「聽寫」，再重新載入。':'Speech recognition is turned off in this browser. The coach can judge for now. 呢個瀏覽器冇開語音辨識，請教練判斷。';showJudge();}
       else if(code==='not_granted'){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent='Microphone is off for this game, so family will be the coach. 咪高峰冇開，請家人做教練。';showJudge();}
       else if(code==='dismissed'){$('heard').textContent='Tap again and allow the microphone. 再㩒一次，准用咪高峰。';}
       else if(code==='rate_limited'){$('heard').textContent='One moment, then try again. 等一陣再試。';}
@@ -1205,8 +1244,11 @@ function pressStart(){if(screen!=='play'||P_.busy)return;ac();if(P_.listening){i
 function pressEnd(){if(P_.skipKeyUp){P_.skipKeyUp=false;return;}if(!P_.listening)return;const held=performance.now()-P_.pressAt;if(held<350&&!P_.tap){P_.tap=true;$('talkTxt').innerHTML=micUsable(iLang())?'Listening… tap again when done<br><span class="zh">聽緊…講完再㩒</span>':'Saying it… tap again when done<br><span class="zh">講緊…講完再㩒</span>';return;}finishListening();}
 async function finishListening(){if(!P_.listening)return;P_.listening=false;clearInterval(P_.watch);const lang=iLang();
   if(!micUsable(lang)){setTalk('idle');showJudge();return;}
+  if(dict&&dict.pending&&dict.pending()){dict.stop();setTalk('idle');$('heard').textContent='First click "Allow" in the box at the top of the screen. Then hold SPACE (or the yellow button) and say the word. 先㩒畫面上面嘅「允許」，再按住空白鍵（或者黃色掣）講。';return;}
   setTalk('busy');P_.busy=true;try{await dict.stop();}catch(e){}
   const heard=(P_.heard+' '+(P_.partial||'')).trim();P_.busy=false;setTalk('idle');
+  const inf=dict&&dict.info,silent=!!inf&&(inf.peak>=0?inf.peak<.015:(inf.audio&&!inf.sound));
+  if(!heard&&silent&&!(dict.lastError==='network'||dict.lastError==='audio-capture')){$('heard').textContent=/Macintosh/.test(navigator.userAgent)?'No sound reached the microphone. Check that a microphone is plugged in and chosen (Apple menu › System Settings › Sound › Input). A Mac mini has no microphone of its own. 咪高峰收唔到聲：請接駁咪高峰，再喺「系統設定›聲音›輸入」揀返佢。':'No sound reached the microphone. Check that the microphone is plugged in, switched on and not muted. 咪高峰收唔到聲：請檢查咪高峰有冇接好、有冇開、有冇靜音。';showJudge(true);return;}
   if(!heard){$('heard').textContent=(dict&&dict.lastError==='network')?'Listening needs the internet. Check the Wi-Fi, or the coach can judge for now. 要上網先聽到，請檢查Wi-Fi，或者教練判斷。':(dict&&dict.lastError==='audio-capture')?'No microphone found. The coach can judge for now. 搵唔到咪高峰，請教練判斷。':'I didn\'t hear anything. Try a big breath and a louder voice. 聽唔到，深呼吸大聲啲再試。';showJudge(true);return;}
   const cands=[heard];const A=P_.alts||[];if(A.length)for(let k=0;k<3;k++){const t=A.map(a=>a[Math.min(k,a.length-1)]).join(' ').trim();if(t)cands.push(t);}
   let pct=-1,best=heard;for(const cnd of cands){const sc=scoreSpeech(curItem().text,cnd,lang);if(sc>pct){pct=sc;best=cnd;}}
@@ -1214,14 +1256,17 @@ async function finishListening(){if(!P_.listening)return;P_.listening=false;clea
 function stopListening(silent){P_.listening=false;clearInterval(P_.watch);try{dict&&dict.stop();}catch(e){}if(!silent)setTalk('idle');}
 function showJudge(noHeard){$('judgeLbl').textContent=noHeard?'Or the coach can decide: 或者教練判斷：':'Coach: how was it? 教練：講得點？';$('judgeBox').hidden=false;}
 const tb=$('talkBtn');
-tb.addEventListener('pointerdown',e=>{e.preventDefault();try{tb.setPointerCapture(e.pointerId);}catch(_){}pressStart();});
+tb.addEventListener('pointerdown',e=>{e.preventDefault();try{tb.setPointerCapture(e.pointerId);}catch(_){}P_.byKey=false;pressStart();});
 tb.addEventListener('pointerup',e=>{e.preventDefault();pressEnd();});tb.addEventListener('pointercancel',()=>pressEnd());
 tb.addEventListener('keydown',e=>{if(e.code==='Enter'){e.preventDefault();}});
-document.addEventListener('keydown',e=>{if(screen!=='play')return;const tag=(e.target&&e.target.tagName)||'';if(tag==='TEXTAREA'||tag==='INPUT'||tag==='SELECT')return;
-  if(e.code==='Space'){e.preventDefault();if(e.repeat)return;pressStart();}
+const isSpace=e=>e.code==='Space'||e.key===' '||e.key==='Spacebar'||e.keyCode===32;let spaceDown=false;
+window.addEventListener('keydown',e=>{if(screen!=='play')return;const tag=(e.target&&e.target.tagName)||'';if((tag==='TEXTAREA'||tag==='INPUT'||tag==='SELECT')&&e.target.offsetParent!==null)return;
+  if(TUT&&TUT_STEPS[TUT.i].wait!=='result')return;
+  if(isSpace(e)){e.preventDefault();if(e.repeat)return;if(spaceDown&&P_.listening&&!P_.tap)P_.tap=true;spaceDown=true;P_.byKey=true;pressStart();}
   else if(!$('judgeBox').hidden&&['Digit1','Digit2','Digit3'].includes(e.code)){e.preventDefault();judge(['great','soso','miss'][+e.code.slice(5)-1]);}
-  else if(e.code==='ArrowRight'&&!$('nextBtn').hidden){e.preventDefault();nextBall();}});
-document.addEventListener('keyup',e=>{if(screen!=='play')return;if(e.code==='Space'){e.preventDefault();pressEnd();}});
+  else if(e.code==='ArrowRight'&&!$('nextBtn').hidden){e.preventDefault();nextBall();}},true);
+window.addEventListener('keyup',e=>{if(!isSpace(e))return;const was=spaceDown;spaceDown=false;if(screen!=='play')return;e.preventDefault();if(was)pressEnd();},true);
+window.addEventListener('blur',()=>{if(spaceDown&&P_.listening&&!P_.tap&&P_.byKey){P_.tap=true;$('talkTxt').innerHTML='Listening… press SPACE again when done<br><span class="zh">聽緊…講完再㩒空白鍵</span>';}spaceDown=false;});
 function judge(g){if(P_.busy)return;if(P_.listening){P_.listening=false;clearInterval(P_.watch);setTalk('idle');}$('judgeBox').hidden=true;const pct=g==='great'?1:g==='soso'?.6:.1;if(P_.override){applyOverride(g);return;}resolveAttempt(g,pct,false);}
 $('jG').onclick=()=>judge('great');$('jS').onclick=()=>judge('soso');$('jM').onclick=()=>judge('miss');
 
@@ -1251,7 +1296,9 @@ function showResult(g,pct,coins,auto){const c=P_.cur;const [big,zbig]=FEED[c.spo
   if(auto){const chips=document.createElement('div');chips.style.cssText='margin-top:8px;font-size:15px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap';chips.innerHTML='<span style="color:var(--muted)">Coach can change it 教練改：</span>';
     [['great','Goal 入波'],['soso','Almost 差少少'],['miss','Missed 再試']].filter(x=>x[0]!==g).forEach(([k,l])=>{const b=document.createElement('button');b.textContent=l;b.style.cssText='min-height:40px;padding:4px 12px;border-radius:10px;background:var(--panel2);border:1px solid var(--line)';b.onclick=()=>applyOverride(k);chips.appendChild(b);});bn.appendChild(chips);}
   P_.busy=false;
-  if(g==='great'){$('nextBtn').hidden=false;const me=P_,ball=P_.cur.idx;clearTimeout(P_.autoNext);P_.autoNext=setTimeout(()=>{if(P_===me&&screen==='play'&&P_.cur.idx===ball&&P_.last&&P_.last.g==='great'&&!$('banner').hidden&&!P_.listening&&!P_.busy)nextBall();},3200);}
+  setTimeout(()=>tutEvent('result'),0);
+  if(g==='great'&&c.kind==='tutorial'){$('nextBtn').hidden=false;}
+  else if(g==='great'){$('nextBtn').hidden=false;const me=P_,ball=P_.cur.idx;clearTimeout(P_.autoNext);P_.autoNext=setTimeout(()=>{if(P_===me&&screen==='play'&&P_.cur.idx===ball&&P_.last&&P_.last.g==='great'&&!$('banner').hidden&&!P_.listening&&!P_.busy)nextBall();},3200);}
   else{$('nextBtn').hidden=false;if(!micUsable(c.lang)){$('judgeLbl').textContent='Try again, then tap one. 再試，然後㩒一個。';$('judgeBox').hidden=false;}if(P_.attempts>=3)$('heard').textContent+=(($('heard').textContent?' · ':'')+'Tough one! Try Hear it or Together, or move on and come back later. 難啲！可以聽一次、一齊講，或者下一個。');}}
 function applyOverride(g){clearTimeout(P_.autoNext);const c=P_.cur;const old=P_.last;if(!old||old.g===g)return;
   logAttempt(old.g,-1);logAttempt(g,1);const mult=c.kind==='cup'?2:1;S.coins+=(PER_TRY[g]-PER_TRY[old.g])*mult;
@@ -1259,14 +1306,15 @@ function applyOverride(g){clearTimeout(P_.autoNext);const c=P_.cur;const old=P_.
   const h=c.hist[c.idx];h[h.length-1]=g;c.results[c.idx]=bestOf(h);P_.last={...old,g,auto:false};save();renderWallet(true);
   const sc=sceneFor('cv');resetDyn();Object.assign(sc.ball,{x:500,y:432,r:34,alpha:1});const shot=makeShot(c.sport,g);sc.anim=shot;$('banner').hidden=true;
   shot.done=()=>{if(g==='great'){sfx('cheer');sc.confetti(shot.focus.x,shot.focus.y);}showResult(g,g==='great'?1:.6,PER_TRY[g]*mult,false);renderKicks();};}
-function nextBall(){clearTimeout(P_.autoNext);const c=P_.cur;if(!c.results[c.idx])c.results[c.idx]='miss';c.idx++;save();
+function nextBall(){clearTimeout(P_.autoNext);const c=P_.cur;if(!c.results[c.idx])c.results[c.idx]='miss';c.idx++;save();setTimeout(()=>tutEvent('next'),0);
+  if(c.kind==='tutorial'){if(c.idx>=c.items.length){c.idx=c.items.length-1;}showBall();return;}
   const mins=(Date.now()-P_.sessionStart)/60000;if(!P_.restShown&&mins>=S.settings.restMin&&c.idx<c.items.length){P_.restShown=true;restModal();return;}showBall();}
 $('nextBtn').onclick=nextBall;
 function restModal(){const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="box"><h3>Great work today! <span class="zh">今日好叻！</span></h3><p>You've been practising for ${S.settings.restMin} minutes. Time for a rest and a drink of water? <span class="zh">練咗${S.settings.restMin}分鐘，休息吓，飲啖水？</span></p><div class="row" style="justify-content:center"><button class="btn primary" id="mRest">Rest now 休息</button><button class="btn" id="mGo">Keep playing 繼續</button></div></div>`;
   document.body.appendChild(m);m.querySelector('#mRest').onclick=()=>{m.remove();show('home');};m.querySelector('#mGo').onclick=()=>{m.remove();showBall();};}
 
 /* level / cup complete */
-function finishRun(){const c=P_.cur;playing=false;const greats=c.results.filter(r=>r==='great').length;const n=c.items.length;const ratio=greats/n;
+function finishRun(){const c=P_.cur;if(c.kind==='tutorial'){S.current=null;save();show('home');return;}playing=false;const greats=c.results.filter(r=>r==='great').length;const n=c.items.length;const ratio=greats/n;
   const stars=ratio>=.99?3:ratio>=.6?2:1;let prize=[0,0,0];let title=['Level complete!','過關！'];let line='';
   if(c.kind==='level'){const key=lvKey(c.stage,c.level);const rec=S.levels[key]||(S.levels[key]={done:false,stars:{},plays:0});const first=!rec.done;rec.done=true;rec.plays=(rec.plays||0)+1;rec.stars[c.lang]=Math.max(rec.stars[c.lang]||0,stars);
     const st=allStages().find(s=>s.id===c.stage);prize=st.reward.map(v=>first?v:Math.floor(v/2));line=`${greats} of ${n} goals · ${n}個波入咗${greats}個`+(first?'':' · replay prize is half 重玩獎勵減半');}
@@ -1416,7 +1464,85 @@ $('fillRefs').onclick=()=>{const ta=$('sVerses');const have=myVerses();const lin
 /* ======================= BOOT ======================= */
 let wakeLock=null;async function keepAwake(on){try{if(on){if(!wakeLock&&navigator.wakeLock){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}else if(wakeLock){const w=wakeLock;wakeLock=null;await w.release();}}catch(e){wakeLock=null;}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&playing)keepAwake(true);});
+/* ======================= TUTORIAL ======================= */
+const TUT_ITEMS={en:[{text:'Hello',mean:'你好',ref:'Tutorial · 教學'},{text:'Thank you',mean:'多謝',ref:'Tutorial · 教學'}],zh:[{text:'你好',mean:'Hello',ref:'Tutorial · 教學'},{text:'多謝',mean:'Thank you',ref:'Tutorial · 教學'}]};
+const TUT_GIFT=[200,0,1];
+const TUT_STEPS=[
+ {id:'welcome',en:'Welcome, Grandpa! Joshua made this game to help you practise speaking. Let\'s learn how to play, one step at a time.',zh:'歡迎你，爺爺！呢個遊戲係Joshua整嚟幫你練講嘢。我哋一步一步學點樣玩。',go:'Start 開始',noBack:true},
+ {id:'lang',en:'Which language do you want to practise? You can change it any time.',zh:'你想練邊種語言？之後隨時可以改。',langs:true},
+ {id:'ball',target:['.pitch'],en:'This is your ball. The word to say is written on it.',zh:'呢個係你嘅波，要講嘅字寫喺波上面。',enter:()=>tutPlay()},
+ {id:'card',target:['.card'],en:'The same word is here, big and clear, with its meaning underneath.',zh:'呢度都有同一個字，又大又清楚，下面係佢嘅意思。',enter:()=>tutPlay()},
+ {id:'hear',target:['#cHear'],wait:'hear',en:'Tap "Hear it" to hear how the word sounds.',zh:'㩒「聽一次」，聽吓個字點讀。',waitEn:'Your turn: tap the lit-up button.',waitZh:'輪到你：㩒發光嘅掣。',enter:()=>tutPlay()},
+ {id:'talk',target:['.talkcol'],wait:'result',en:'Take a big breath. Hold the yellow button (or the SPACE bar), say the word loud and slow, then let go.',zh:'深呼吸。按住黃色掣（或者空白鍵），大聲、慢慢講個字，講完放手。',
+  coachEn:'Take a big breath and say the word, loud and slow. Then your family taps Goal, Almost or Missed.',coachZh:'深呼吸，大聲、慢慢講個字。然後家人㩒「入波」、「差少少」或者「再試」。',waitEn:'Your turn: say the word.',waitZh:'輪到你：講個字。',enter:()=>tutPlay()},
+ {id:'result',target:['#banner','.pitch'],en:'Goal means great! Off the post means almost there. Wide means try again. Every try wins coins.',zh:'入波即係好叻！中柱即係差少少。射歪就再試。每次試都有金幣。'},
+ {id:'help',target:['.cues'],en:'If a word is hard, tap "Slow beats" or "Together" and say it along with the game. You can try as many times as you like.',zh:'如果個字難，㩒「慢慢拍住講」或者「一齊講」，跟住遊戲講。試幾多次都得。'},
+ {id:'next',target:['#nextBtn','.talkcol'],wait:'next',en:'Tap "Next ball" when you are ready for the next word.',zh:'準備好就㩒「下一個」。',waitEn:'Your turn: tap Next ball.',waitZh:'輪到你：㩒「下一個」。'},
+ {id:'two',target:['.talkcol'],wait:'result',en:'One more! Say this word.',zh:'再嚟一個！講呢個字。',waitEn:'Your turn: say the word.',waitZh:'輪到你：講個字。'},
+ {id:'home',target:['.homegrid'],en:'At home: Resume carries on where you stopped. Cups give big prizes. The Store has new balls and fields.',zh:'主頁：「繼續」由上次停低嘅地方開始。「盃賽」有大獎。「商店」有新波同新球場。',noBack:true,enter:()=>{if(screen==='play'){S.current=null;save();}if(screen!=='home')show('home');}},
+ {id:'done',en:'You\'re ready! Here is a welcome gift: 200 coins and 1 diamond. Your diamond can buy the Yuet Wah College field in the Store!',zh:'準備好喇！送你見面禮：200金幣同1粒鑽石。用鑽石可以喺商店買粵華中學球場！',
+  againEn:'You\'re ready! Let\'s play.',againZh:'準備好喇！開始玩啦。',go:'Start playing 開始玩',noBack:true,enter:()=>{if(!S.tutorialDone){S.tutorialDone=true;S.coins+=TUT_GIFT[0];S.gold+=TUT_GIFT[1];S.gems+=TUT_GIFT[2];TUT.gift=true;save();renderWallet(true);sfx('cheer');}}}];
+let TUT=null;
+function tutLang(){return TUT&&TUT.i<=1?(canSpeak('zh')?'zh':'en'):S.lang;}
+function tutPlay(){if(screen==='play'&&P_.cur&&P_.cur.kind==='tutorial'&&P_.cur.lang===S.lang)return;
+  const items=TUT_ITEMS[S.lang].map(x=>Object.assign({},x));S.settings.modelFirst=S.settings.modelFirst;
+  startPlay({kind:'tutorial',items,idx:0,results:items.map(()=>null),tries:items.map(()=>0),sport:S.sport,lang:S.lang},false);}
+function tutEls(){if(TUT.els)return TUT.els;const root=document.createElement('div');root.id='tut';
+  root.innerHTML='<div class="tut-shade"></div><div class="tut-spot" style="display:none"></div><div class="tut-block"></div><div class="tut-block"></div><div class="tut-block"></div><div class="tut-block"></div><div class="tut-card" role="dialog" aria-modal="true" aria-live="polite"></div>';
+  document.body.appendChild(root);const b=[...root.querySelectorAll('.tut-block')];
+  TUT.els={root,shade:root.querySelector('.tut-shade'),spot:root.querySelector('.tut-spot'),blocks:b,card:root.querySelector('.tut-card')};return TUT.els;}
+function tutTarget(st){if(!st.target)return null;for(const sel of st.target){const el=document.querySelector(sel);if(el&&!el.hidden&&el.offsetParent!==null){const r=el.getBoundingClientRect();if(r.width>0&&r.height>0)return el;}}return null;}
+function setRect(el,x,y,w,h){el.style.left=x+'px';el.style.top=y+'px';el.style.width=Math.max(0,w)+'px';el.style.height=Math.max(0,h)+'px';}
+function tutPlace(){if(!TUT||!TUT.els)return;const st=TUT_STEPS[TUT.i];const {spot,blocks,card,shade}=TUT.els;const el=tutTarget(st);const vw=document.documentElement.clientWidth,vh=window.innerHeight;
+  if(el){const r=el.getBoundingClientRect();const pad=8;const x=Math.max(2,r.left-pad),y=Math.max(2,r.top-pad),w=Math.min(vw-4,r.right+pad)-x,h=Math.min(vh-4,r.bottom+pad)-y;
+    spot.style.display='block';setRect(spot,x,y,w,h);shade.style.display='none';
+    setRect(blocks[0],0,0,vw,y);setRect(blocks[1],0,y+h,vw,vh-(y+h));setRect(blocks[2],0,y,x,h);setRect(blocks[3],x+w,y,vw-(x+w),h);
+    card.classList.toggle('tight',vh<720);card.style.maxHeight='';let ch=card.offsetHeight;const cw=card.offsetWidth;const below=vh-(y+h)-20,above=y-20;let top;
+    const big=h>vh*.45;
+    if(ch<=below)top=y+h+12;else if(ch<=above)top=y-12-ch;
+    else if(big&&Math.max(below,above)<160){card.style.maxHeight=Math.round(vh*.5)+'px';ch=card.offsetHeight;top=vh-ch-8;}
+    else if(below>=above){card.style.maxHeight=Math.max(140,below)+'px';top=y+h+12;}
+    else{card.style.maxHeight=Math.max(140,above)+'px';ch=card.offsetHeight;top=Math.max(8,y-12-ch);}
+    ch=card.offsetHeight;top=Math.max(8,Math.min(top,vh-ch-8));
+    card.style.top=top+'px';card.style.left=Math.max(8,Math.min(x+w/2-cw/2,vw-cw-8))+'px';}
+  else{card.classList.toggle('tight',vh<720);card.style.maxHeight='';spot.style.display='none';shade.style.display='block';setRect(blocks[0],0,0,vw,vh);blocks.slice(1).forEach(b=>setRect(b,0,0,0,0));
+    card.style.top=Math.max(8,(vh-card.offsetHeight)/2)+'px';card.style.left=Math.max(8,(vw-card.offsetWidth)/2)+'px';}}
+function tutSay(){if(!TUT||!TUT.spoke||!S.settings.voice)return;const st=TUT_STEPS[TUT.i];const l=tutLang();const t=tutText(st,l);if(canSpeak(l))speak(t,l,.9);}
+function tutText(st,l){const coach=st.coachEn&&!micUsable(S.lang==='zh'?'zh':'en');const again=st.againEn&&S.tutorialDone&&!TUT.gift;
+  const t=l==='zh'?(coach?st.coachZh:again?st.againZh:st.zh):(coach?st.coachEn:again?st.againEn:st.en);
+  return $('talkKey').textContent==='TAP'?t.replace(' (or the SPACE bar)','').replace('（或者空白鍵）',''):t;}
+function tutRender(){const st=TUT_STEPS[TUT.i];const {card}=tutEls();card.innerHTML='';
+  const body=document.createElement('div');body.className='tbody';card.appendChild(body);
+  const h=document.createElement('div');h.className='tstep';h.textContent=`Tutorial · step ${TUT.i+1} of ${TUT_STEPS.length} · 第${TUT.i+1}步`;
+  const en=document.createElement('div');en.className='ten';en.textContent=tutText(st,'en');const zh=document.createElement('div');zh.className='tzh';zh.textContent=tutText(st,'zh');body.append(h,en,zh);
+  if(st.wait){const w=document.createElement('div');w.className='twait';w.textContent=`${st.waitEn} ${st.waitZh}`;body.appendChild(w);}
+  if(st.langs){const g=document.createElement('div');g.className='tlangs';[['en','English'],['zh','廣東話']].forEach(([k,l])=>{const b=document.createElement('button');b.textContent=l;b.id='tutLang-'+k;b.setAttribute('aria-pressed',S.lang===k);b.onclick=()=>{TUT.spoke=true;S.lang=k;save();tutGo(TUT.i+1);};g.appendChild(b);});card.appendChild(g);}
+  const row=document.createElement('div');row.className='trow';
+  const skip=document.createElement('button');skip.className='skip';skip.id='tutSkip';skip.textContent='Skip tutorial 跳過';skip.onclick=()=>tutEnd(false);
+  const sp=document.createElement('span');sp.className='grow';row.append(skip,sp);
+  if(TUT.i>0&&!st.noBack){const b=document.createElement('button');b.id='tutBack';b.textContent='← Back 返轉頭';b.onclick=()=>{TUT.spoke=true;tutGo(TUT.i-1);};row.appendChild(b);}
+  if(canSpeak(tutLang())){const b=document.createElement('button');b.id='tutHear';b.textContent='Hear this 聽';b.onclick=()=>{TUT.spoke=true;tutSay();};row.appendChild(b);}
+  if(!st.langs){const b=document.createElement('button');b.className='go';b.id='tutNext';b.textContent=st.go||(st.wait?'Next 下一步':'Next 下一步 →');b.onclick=()=>{TUT.spoke=true;if(TUT.i===TUT_STEPS.length-1)tutEnd(true);else tutGo(TUT.i+1);};row.appendChild(b);}
+  card.appendChild(row);}
+function tutGo(i){if(!TUT)return;i=Math.max(0,Math.min(TUT_STEPS.length-1,i));TUT.i=i;const st=TUT_STEPS[i];stopSpeak();
+  if(st.enter)st.enter();tutRender();tutPlace();
+  const show_=()=>{if(!TUT||TUT.i!==i)return;const el=tutTarget(st);if(el&&el.scrollIntoView){const r=el.getBoundingClientRect();const big=r.height>=innerHeight*.45,small=innerHeight<720&&!big;el.scrollIntoView({block:big?'start':small?'end':'center',inline:'nearest'});if(small)window.scrollBy(0,12);}tutPlace();requestAnimationFrame(tutPlace);};
+  setTimeout(show_,60);setTimeout(show_,400);tutSay();
+  const f=TUT.els.card.querySelector('#tutNext,#tutLang-en');if(f)try{f.focus({preventScroll:true});}catch(e){}}
+function tutEvent(type){if(!TUT)return;const st=TUT_STEPS[TUT.i];
+  if(st.wait===type){const at=TUT.i;setTimeout(()=>{if(TUT&&TUT.i===at)tutGo(at+1);},type==='result'?1500:type==='hear'?1200:300);}
+  else setTimeout(()=>requestAnimationFrame(tutPlace),30);}
+function tutStart(){if(TUT)return;ac();TUT={i:0,spoke:false,gift:false};tutEls();if(screen!=='home')show('home');tutGo(0);}
+function tutEnd(finished){if(!TUT)return;stopSpeak();const was=TUT;TUT=null;if(was.els)was.els.root.remove();S.tutorialSeen=true;
+  if(screen==='play'&&P_.cur&&P_.cur.kind==='tutorial'){S.current=null;save();show('home');}else save();
+  if(finished){const n=firstOpenLevel();beginLevel(n.stage,n.level);}else renderHome();}
+window.addEventListener('resize',()=>{if(TUT)requestAnimationFrame(tutPlace);});
+window.addEventListener('scroll',()=>{if(TUT)requestAnimationFrame(tutPlace);},{passive:true});
+document.addEventListener('keydown',e=>{if(!TUT)return;if(e.key==='Escape'){e.preventDefault();tutEnd(false);}},true);
+$('bTut').onclick=()=>tutStart();$('bTut2').onclick=()=>tutStart();
 function boot(){renderWallet();show('home');
+  if(S.current&&S.current.kind==='tutorial'){S.current=null;}
+  if(!window.__NO_TUT&&!S.tutorialSeen&&!Object.keys(S.days).length&&!S.current)setTimeout(()=>{if(screen==='home'&&!TUT)tutStart();},500);
   if(document.fullscreenEnabled){$('fsBtn').hidden=false;$('fsBtn').onclick=()=>{try{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});}catch(e){}};}
   if(window.matchMedia&&matchMedia('(pointer: coarse)').matches&&!matchMedia('(pointer: fine)').matches){$('talkKey').textContent='TAP';}
   try{speechSynthesis.onvoiceschanged=()=>{if(screen==='play'&&P_.cur){const ok=canSpeak(iLang());['cHear','cSlow','cTog'].forEach(id=>$(id).disabled=!ok);}};speechSynthesis.getVoices();}catch(e){}
