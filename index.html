@@ -1239,7 +1239,7 @@ function pressStart(){if(screen!=='play'||P_.busy)return;ac();if(P_.listening){i
   if(!IN_CLAUDE&&hasMic===false&&micUsable(lang)){stopSpeak();$('banner').hidden=true;$('heard').textContent=noMicMsg();showJudge(true);checkMic();return;}
   stopSpeak();P_.heard='';P_.partial='';P_.alts=[];P_.pressAt=performance.now();P_.listening=true;P_.tap=false;P_.lastHeardAt=0;P_.startAt=performance.now();
   $('judgeBox').hidden=micUsable(lang)?true:false;$('banner').hidden=true;setTalk('listening');
-  if(micUsable(lang)){const opts=lang==='zh'?{language:'zh-HK'}:{language:'en'};if(!IN_CLAUDE&&!window.__micHint){window.__micHint=1;toast('The browser will ask once to use the microphone. Choose Allow. 瀏覽器會問一次用唔用咪高峰，揀「允許」。',6000);}
+  if(micUsable(lang)){const opts=lang==='zh'?{language:'zh-HK'}:{language:'en'};if(!IN_CLAUDE&&!window.__micHint){window.__micHint=1;toast(location.protocol==='https:'&&!/iPhone|iPad|iPod/.test(navigator.userAgent)?'The browser will ask to use the microphone. Choose "Allow while visiting the site" and it won\'t ask again. 瀏覽器會問用唔用咪高峰，揀「瀏覽網站時允許」，以後唔會再問。':'The browser will ask once to use the microphone. Choose Allow. 瀏覽器會問一次用唔用咪高峰，揀「允許」。',7000);}
     dict.start(opts).catch(err=>{const code=err&&err.code;
       if(code==='cancelled'){if(!P_.listening&&err.ready&&screen==='play')$('heard').textContent='The microphone is ready. Hold SPACE (or the yellow button) and say the word. 咪高峰準備好喇，按住空白鍵（或者黃色掣）講。';return;}
       P_.listening=false;setTalk('idle');
