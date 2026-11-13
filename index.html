@@ -881,6 +881,9 @@ function makeWebDictation(){const SR=window.SpeechRecognition||window.webkitSpee
   return api;}
 /* dictation (the platform's speech-to-text) */
 let dict=null, dictState='idle', dictLangFail={};
+let hasMic=null;
+function checkMic(){const md=navigator.mediaDevices;if(IN_CLAUDE||!md||!md.enumerateDevices)return;try{md.enumerateDevices().then(l=>{hasMic=(!l||!l.length)?null:l.some(d=>d.kind==='audioinput');}).catch(()=>{});}catch(e){}}
+function noMicMsg(){return /Macintosh/.test(navigator.userAgent)?'No microphone is connected to this Mac, so the browser has nothing to ask about. A Mac mini has no microphone of its own: plug in a headset, webcam or AirPods, choose it in Apple menu › System Settings › Sound › Input, then try again. For now the coach can judge. 呢部Mac冇接咪高峰：請接駁耳機咪、網絡攝影機或者AirPods，再試。':'No microphone is connected to this computer. Plug one in (or switch it on), then try again. For now the coach can judge. 呢部電腦冇接咪高峰，請接好再試。';}
 function micUsable(lang){return S.settings.judge==='auto'&&dict&&!dictLangFail[lang];}
 
 /* ======================= CANVAS SCENES ======================= */
@@ -1227,7 +1230,9 @@ $('cTog').onclick=async()=>{$('heard').textContent='Say it along with me. 跟住
 /* talking: hold SPACE / the yellow button (tap once to start, again to stop also works) */
 function pressStart(){if(screen!=='play'||P_.busy)return;ac();if(P_.listening){if(P_.tap){P_.tap=false;finishListening();}return;}
   if(P_.last&&P_.last.g==='great'&&!$('banner').hidden&&P_.cur.results[P_.cur.idx]==='great'){P_.skipKeyUp=true;nextBall();return;}clearTimeout(P_.autoNext);
-  const lang=iLang();stopSpeak();P_.heard='';P_.partial='';P_.alts=[];P_.pressAt=performance.now();P_.listening=true;P_.tap=false;P_.lastHeardAt=0;P_.startAt=performance.now();
+  const lang=iLang();
+  if(!IN_CLAUDE&&hasMic===false&&micUsable(lang)){stopSpeak();$('banner').hidden=true;$('heard').textContent=noMicMsg();showJudge(true);checkMic();return;}
+  stopSpeak();P_.heard='';P_.partial='';P_.alts=[];P_.pressAt=performance.now();P_.listening=true;P_.tap=false;P_.lastHeardAt=0;P_.startAt=performance.now();
   $('judgeBox').hidden=micUsable(lang)?true:false;$('banner').hidden=true;setTalk('listening');
   if(micUsable(lang)){const opts=lang==='zh'?{language:'zh-HK'}:{language:'en'};if(!IN_CLAUDE&&!window.__micHint){window.__micHint=1;toast('The browser will ask once to use the microphone. Choose Allow. 瀏覽器會問一次用唔用咪高峰，揀「允許」。',6000);}
     dict.start(opts).catch(err=>{const code=err&&err.code;
@@ -1236,6 +1241,7 @@ function pressStart(){if(screen!=='play'||P_.busy)return;ac();if(P_.listening){i
       if(code==='unavailable'){dictLangFail[lang]=true;$('heard').textContent=lang==='zh'?'The game can\'t listen in Cantonese here, so family will be the coach. 呢度聽唔到廣東話，請家人做教練。':'Listening isn\'t available here, so family will be the coach. 請家人做教練。';showJudge();}
       else if(code==='not_granted'&&dict&&dict.lastError==='service-not-allowed'){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent=(/Macintosh/.test(navigator.userAgent)&&!/Chrome|Chromium|Edg|Firefox/.test(navigator.userAgent))?'Speech recognition is off on this Mac. Turn on Dictation (Apple menu › System Settings › Keyboard › Dictation) and reload, or open the game in Google Chrome. For now the coach can judge. 請喺系統設定開「聽寫」，或者用Chrome開。':/iPhone|iPad|iPod/.test(navigator.userAgent)?'Speech recognition is off on this iPhone. Turn on Settings › General › Keyboard › Enable Dictation, then reload. For now the coach can judge. 請喺設定開「聽寫」，再重新載入。':'Speech recognition is turned off in this browser. The coach can judge for now. 呢個瀏覽器冇開語音辨識，請教練判斷。';showJudge();}
       else if(code==='not_granted'){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent='Microphone is off for this game, so family will be the coach. 咪高峰冇開，請家人做教練。';showJudge();}
+      else if(dict&&dict.lastError==='audio-capture'){hasMic=false;checkMic();$('heard').textContent=noMicMsg();showJudge(true);}
       else if(code==='dismissed'){$('heard').textContent='Tap again and allow the microphone. 再㩒一次，准用咪高峰。';}
       else if(code==='rate_limited'){$('heard').textContent='One moment, then try again. 等一陣再試。';}
       else{$('heard').textContent=IN_CLAUDE?'The microphone had a problem. Coach can judge this one. 咪高峰有問題，請教練判斷。':'Couldn\'t listen. Check the internet and the microphone. The coach can judge this one. 聽唔到：請檢查上網同咪高峰，今次請教練判斷。';showJudge();}});
@@ -1249,7 +1255,7 @@ async function finishListening(){if(!P_.listening)return;P_.listening=false;clea
   const heard=(P_.heard+' '+(P_.partial||'')).trim();P_.busy=false;setTalk('idle');
   const inf=dict&&dict.info,silent=!!inf&&(inf.peak>=0?inf.peak<.015:(inf.audio&&!inf.sound));
   if(!heard&&silent&&!(dict.lastError==='network'||dict.lastError==='audio-capture')){$('heard').textContent=/Macintosh/.test(navigator.userAgent)?'No sound reached the microphone. Check that a microphone is plugged in and chosen (Apple menu › System Settings › Sound › Input). A Mac mini has no microphone of its own. 咪高峰收唔到聲：請接駁咪高峰，再喺「系統設定›聲音›輸入」揀返佢。':'No sound reached the microphone. Check that the microphone is plugged in, switched on and not muted. 咪高峰收唔到聲：請檢查咪高峰有冇接好、有冇開、有冇靜音。';showJudge(true);return;}
-  if(!heard){$('heard').textContent=(dict&&dict.lastError==='network')?'Listening needs the internet. Check the Wi-Fi, or the coach can judge for now. 要上網先聽到，請檢查Wi-Fi，或者教練判斷。':(dict&&dict.lastError==='audio-capture')?'No microphone found. The coach can judge for now. 搵唔到咪高峰，請教練判斷。':'I didn\'t hear anything. Try a big breath and a louder voice. 聽唔到，深呼吸大聲啲再試。';showJudge(true);return;}
+  if(!heard){$('heard').textContent=(dict&&dict.lastError==='network')?'Listening needs the internet. Check the Wi-Fi, or the coach can judge for now. 要上網先聽到，請檢查Wi-Fi，或者教練判斷。':(dict&&dict.lastError==='audio-capture')?noMicMsg():'I didn\'t hear anything. Try a big breath and a louder voice. 聽唔到，深呼吸大聲啲再試。';showJudge(true);return;}
   const cands=[heard];const A=P_.alts||[];if(A.length)for(let k=0;k<3;k++){const t=A.map(a=>a[Math.min(k,a.length-1)]).join(' ').trim();if(t)cands.push(t);}
   let pct=-1,best=heard;for(const cnd of cands){const sc=scoreSpeech(curItem().text,cnd,lang);if(sc>pct){pct=sc;best=cnd;}}
   const g=gradeOf(pct);$('heard').textContent=`I heard: "${best}" · 聽到：「${best}」`;resolveAttempt(g,pct,true);}
@@ -1540,7 +1546,7 @@ window.addEventListener('resize',()=>{if(TUT)requestAnimationFrame(tutPlace);});
 window.addEventListener('scroll',()=>{if(TUT)requestAnimationFrame(tutPlace);},{passive:true});
 document.addEventListener('keydown',e=>{if(!TUT)return;if(e.key==='Escape'){e.preventDefault();tutEnd(false);}},true);
 $('bTut').onclick=()=>tutStart();$('bTut2').onclick=()=>tutStart();
-function boot(){renderWallet();show('home');
+function boot(){renderWallet();show('home');checkMic();try{navigator.mediaDevices&&navigator.mediaDevices.addEventListener&&navigator.mediaDevices.addEventListener('devicechange',checkMic);}catch(e){}
   if(S.current&&S.current.kind==='tutorial'){S.current=null;}
   if(!window.__NO_TUT&&!S.tutorialSeen&&!Object.keys(S.days).length&&!S.current)setTimeout(()=>{if(screen==='home'&&!TUT)tutStart();},500);
   if(document.fullscreenEnabled){$('fsBtn').hidden=false;$('fsBtn').onclick=()=>{try{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});}catch(e){}};}
