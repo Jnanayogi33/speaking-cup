@@ -1,0 +1,14 @@
+{
+  "name": "Grandpa's Speaking Cup 爺爺講話盃",
+  "short_name": "Speaking Cup",
+  "description": "Say the word on the ball to score. Speech practice game designed by Joshua.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#0F1D30",
+  "theme_color": "#0F1D30",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
