@@ -60,6 +60,7 @@ p{margin:0}
 .btn small{font-weight:400;font-size:15px;color:var(--muted)}
 .btn:hover{background:#26426A}
 .btn.primary{background:var(--score);color:var(--score-ink);border-color:var(--score)}
+.safaribox{margin:0 0 12px;border:2px solid var(--score)}.safaribox p{margin:0 0 8px}.safaribox .sfrow{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 8px}.safaribox .sfrow .btn{margin-top:0;flex:1 1 180px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}.safaribox .sfurl{word-break:break-all;user-select:all;-webkit-user-select:all}.safaribox p .zh{display:block;margin-top:4px}
 .btn.primary small{color:#4A3B00}
 .btn.primary:hover{background:#FFE071}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
@@ -885,7 +886,16 @@ function makeWebDictation(){const SR=window.SpeechRecognition||window.webkitSpee
 /* dictation (the platform's speech-to-text) */
 let dict=null, dictState='idle', dictLangFail={};
 let hasMic=null;
-function browserName(){const u=navigator.userAgent;if(navigator.brave)return 'Brave';if(/Edg\//.test(u))return 'Microsoft Edge';if(/OPR\//.test(u))return 'Opera';if(/Vivaldi/.test(u))return 'Vivaldi';if(/Firefox\//.test(u))return 'Firefox';if(/CriOS|Chrome\//.test(u))return 'Google Chrome';if(/Safari\//.test(u))return 'Safari';return 'This browser';}
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const IOS_OTHER=IOS&&/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|GSA\/|FBAN|FBAV|FB_IAB|Instagram|Line\/|WhatsApp|MicroMessenger/.test(navigator.userAgent);
+/* iPhone: listening works only in the Safari app itself (not Chrome or other iPhone browsers, in-app browsers or Home Screen web apps) */
+function safariBox(){const u=location.href.split('#')[0];const d=document.createElement('div');d.className='panel safaribox';
+  d.innerHTML='<p><b>On iPhone, the microphone only works in Safari.</b> '+(IOS_OTHER?'This is '+browserName()+'. ':'')+'Open the game in Safari to play by talking. Until then, family can be the coach here.<span class="zh">iPhone 只可以喺 Safari 用咪高峰。請用 Safari 開遊戲；之前可以由家人做教練。</span></p>'
+   +'<div class="sfrow"><a class="btn primary" href="x-safari-'+u+'">Open in Safari <span class="zh">用 Safari 開</span></a><button class="btn" type="button">Copy link <span class="zh">複製連結</span></button></div>'
+   +'<p class="note">If the Safari button does nothing: copy the link, open Safari, tap the address bar and paste. To have links and the Home Screen icon always open in Safari, make Safari the default browser: Settings › Apps › Default Browser App › Safari. <span class="zh">如果個掣冇反應：複製連結，打開 Safari 貼上。想以後自動用 Safari 開，可以喺「設定」將 Safari 設為預設瀏覽器。</span></p><p class="note sfurl"></p>';
+  d.querySelector('.sfurl').textContent=u;d.querySelector('button').onclick=()=>{const done=()=>toast('Link copied. Open Safari, tap the address bar and paste. 已複製，喺 Safari 貼上。',6000);try{navigator.clipboard.writeText(u).then(done,()=>toast(u,8000));}catch(e){toast(u,8000);}};return d;}
+function showSafariHelp(where){if(IN_CLAUDE||!IOS)return false;const box=$(where);if(!box)return false;if(!box.querySelector('.safaribox'))box.prepend(safariBox());return true;}
+function browserName(){const u=navigator.userAgent;if(/CriOS/.test(u))return 'Chrome on iPhone';if(/FxiOS/.test(u))return 'Firefox on iPhone';if(/EdgiOS/.test(u))return 'Edge on iPhone';if(/FBAN|FBAV|FB_IAB|Instagram|Line\/|WhatsApp|MicroMessenger|GSA\//.test(u))return 'an in-app browser';if(navigator.brave)return 'Brave';if(/Edg\//.test(u))return 'Microsoft Edge';if(/OPR\//.test(u))return 'Opera';if(/Vivaldi/.test(u))return 'Vivaldi';if(/Firefox\//.test(u))return 'Firefox';if(/CriOS|Chrome\//.test(u))return 'Google Chrome';if(/Safari\//.test(u))return 'Safari';return 'This browser';}
 function noSpeechBrowser(){return !IN_CLAUDE&&/^(Brave|Opera|Vivaldi|Firefox)$/.test(browserName());}
 function wrongBrowserMsg(){return `${browserName()} can't do speech recognition. Open the game in Google Chrome or Microsoft Edge (right-click the file › Open with). For now the coach can judge. 呢個瀏覽器聽唔到，請用Chrome或者Edge開。`;}
 function blockedMsg(){const b=browserName(),mac=/Macintosh/.test(navigator.userAgent),win=/Windows/.test(navigator.userAgent),file=location.protocol==='file:',edge=b==='Microsoft Edge';const sys=mac?` Also check Apple menu › System Settings › Privacy & Security › Microphone: ${b} must be turned on.`:win?' Also check Start › Settings › Privacy & security › Microphone: microphone access and "Let desktop apps access your microphone" must be on.':'';const how=file&&/^(Google Chrome|Microsoft Edge)$/.test(b)?` To fix it: type ${edge?'edge':'chrome'}://settings/content/microphone in the address bar and press Enter. Pick your microphone at the top, choose "${edge?'Ask before accessing':'Sites can ask to use your microphone'}", and delete any file:/// line under "${edge?'Block':'Not allowed'}".`:' To fix it: click the microphone or lock icon at the left of the address bar and turn the microphone on (Allow).';return `${b} is blocking the microphone, so family is the coach for now.`+how+sys+' Then reload the game. 瀏覽器封鎖咗咪高峰：請喺瀏覽器設定准用咪高峰，再重新載入。';}
@@ -1259,6 +1269,7 @@ function pressStart(mode){if(screen!=='play'||P_.busy)return;if(mode!=='auto')ac
       if(code==='cancelled'){if(!P_.listening&&err.ready&&screen==='play')$('heard').textContent='The microphone is ready. Hold SPACE (or the yellow button) and say the word. 咪高峰準備好喇，按住空白鍵（或者黃色掣）講。';return;}
       P_.listening=false;setTalk('idle');
       if(code==='unavailable'){dictLangFail[lang]=true;$('heard').textContent=lang==='zh'?'The game can\'t listen in Cantonese here, so family will be the coach. 呢度聽唔到廣東話，請家人做教練。':'Listening isn\'t available here, so family will be the coach. 請家人做教練。';showJudge();}
+      else if(IOS_OTHER&&(code==='not_granted'||code==='upstream_error'||code==='unavailable')){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent='On iPhone, the microphone only works in Safari. See the Safari button on the Home screen. For now the coach can judge. 只可以喺 Safari 用咪高峰，請返主頁㩒「用 Safari 開」。';showJudge();showSafariHelp('sc-home');}
       else if(code==='not_granted'&&dict&&dict.lastError==='service-not-allowed'){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent=(/Macintosh/.test(navigator.userAgent)&&!/Chrome|Chromium|Edg|Firefox/.test(navigator.userAgent))?'Speech recognition is off on this Mac. Turn on Dictation (Apple menu › System Settings › Keyboard › Dictation) and reload, or open the game in Google Chrome. For now the coach can judge. 請喺系統設定開「聽寫」，或者用Chrome開。':/iPhone|iPad|iPod/.test(navigator.userAgent)?'Speech recognition is off on this iPhone. Turn on Settings › General › Keyboard › Enable Dictation, then reload. For now the coach can judge. 請喺設定開「聽寫」，再重新載入。':'Speech recognition is turned off in this browser. The coach can judge for now. 呢個瀏覽器冇開語音辨識，請教練判斷。';showJudge();}
       else if(noSpeechBrowser()){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent=wrongBrowserMsg();showJudge();}
       else if(code==='not_granted'){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent=blockedMsg();showJudge();}
@@ -1591,7 +1602,7 @@ function boot(){renderWallet();show('home');checkMic();try{navigator.mediaDevice
     claude.use('dictation').then(d=>{if(d)wireDict(d);}).catch(()=>{});
     claude.use('tts').then(t=>{if(t)ttsCap=t;}).catch(()=>{});
     initDb();}
-  else{const w=makeWebDictation();if(w)wireDict(w);$('backupBox').hidden=false;}}
+  else{const w=makeWebDictation();if(w)wireDict(w);$('backupBox').hidden=false;if(IOS&&(!dict||IOS_OTHER))showSafariHelp('sc-home');}}
 function wireDict(d){dict=d;
       d.onPartial(({text})=>{if(!P_.listening&&!P_.busy)return;P_.partial=text||'';if(text)P_.lastHeardAt=performance.now();$('heard').textContent=((P_.heard+' '+P_.partial).trim())?`Hearing: ${(P_.heard+' '+P_.partial).trim()}`:'';});
       d.onFinal(({text,alts})=>{P_.heard=((P_.heard||'')+(text||'')).trim();P_.partial='';P_.lastHeardAt=performance.now();if(alts&&alts.length)(P_.alts=P_.alts||[]).push(alts);});
