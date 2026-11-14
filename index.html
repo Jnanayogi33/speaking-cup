@@ -565,7 +565,8 @@ p{margin:0}
 
 <script>
 /* ======================= CONTENT ======================= */
-// Stages 1–5: separate English and Cantonese lists ("text|meaning"). Stages 6–7: aligned verses/prayers.
+// Stages 1–3: separate English and Cantonese lists ("text|meaning"). Stages 4–5: aligned verses/prayers.
+// (Short words and Two-beat words were removed on 2026-11-14: too easy for him.)
 const STAGES = [
  {id:'warm', en:'Warm-up', zh:'熱身', about:'Counting, days and hello: familiar words that come easiest. 數字、星期、打招呼。', reward:[100,10,1],
   lv:{en:[
@@ -576,36 +577,6 @@ const STAGES = [
    ['一、二、三|One, two, three','四、五、六|Four, five, six','七、八、九、十|Seven, eight, nine, ten','係|Yes','唔係|No'],
    ['你好|Hello','早晨|Good morning','多謝|Thank you','拜拜|Bye-bye','亞孟|Amen'],
    ['星期一、星期二|Monday, Tuesday','星期三、星期四|Wednesday, Thursday','星期五、星期六|Friday, Saturday','星期日|Sunday','祝你生日快樂|Happy birthday to you']]}},
- {id:'short', en:'Short words', zh:'短字', about:'Joshua\'s rhyming words like hat, mat, sat. One beat each. 一個音嘅字。', reward:[100,10,1],
-  lv:{en:[
-   ['hat|帽','mat|地蓆','sat|坐咗','cat|貓','bat|球棒'],
-   ['big|大','pig|豬','dig|掘','wig|假髮','fig|無花果'],
-   ['hot|熱','pot|煲','dot|點','top|頂','mop|地拖'],
-   ['sun|太陽','run|跑','fun|好玩','bun|包','one|一'],
-   ['bed|床','red|紅色','ten|十','pen|筆','hen|母雞'],
-   ['tea|茶','rice|飯','soup|湯','fish|魚','milk|奶']],
-  zh:[
-   ['茶|tea','水|water','飯|rice','粥|congee','湯|soup'],
-   ['爸|dad','媽|mum','哥|older brother','姐|older sister','孫|grandchild'],
-   ['痛|it hurts','凍|cold','熱|hot','攰|tired','飽|full'],
-   ['食|eat','飲|drink','坐|sit','企|stand','行|walk'],
-   ['好|good','得|OK','要|want','啱|right','掂|all good'],
-   ['天|sky','山|hill','海|sea','花|flower','雨|rain']]}},
- {id:'two', en:'Two-beat words', zh:'兩個音', about:'Two syllables: water, happy, doctor. 兩個音：飲茶、開心。', reward:[200,20,2],
-  lv:{en:[
-   ['water|水','coffee|咖啡','apple|蘋果','noodles|麵','chicken|雞'],
-   ['sorry|對唔住','welcome|歡迎','okay|好呀','maybe|可能','today|今日'],
-   ['happy|開心','funny|好笑','sunny|好天','rainy|落雨','windy|大風'],
-   ['doctor|醫生','pillow|枕頭','blanket|被','window|窗','table|枱'],
-   ['Grandpa|爺爺','Grandma|嫲嫲','brother|兄弟','sister|姊妹','baby|BB'],
-   ['soccer|足球','football|美式足球','tennis|網球','kicking|踢','running|跑步']],
-  zh:[
-   ['飲茶|have dim sum','食飯|eat a meal','飲水|drink water','咖啡|coffee','麵包|bread'],
-   ['唔該|please / thanks','晚安|good night','再見|goodbye','早抖|sleep well','好呀|OK!'],
-   ['爸爸|dad','媽媽|mum','老婆|wife','孫仔|grandson','屋企|home'],
-   ['開心|happy','舒服|comfortable','好味|tasty','鍾意|like','掛住|miss you'],
-   ['洗手|wash hands','刷牙|brush teeth','沖涼|shower','瞓覺|sleep','起身|get up'],
-   ['踢波|play soccer','足球|soccer','籃球|basketball','射門|shoot!','入波|goal!']]}},
  {id:'long', en:'Long words', zh:'長啲嘅字', about:'Three beats or more: banana, wonderful, together. 三個音或以上。', reward:[1000,100,10],
   lv:{en:[
    ['banana|香蕉','tomato|番茄','potato|薯仔','broccoli|西蘭花','spaghetti|意粉'],
@@ -1180,6 +1151,7 @@ function renderHome(){renderWallet();const sc=drawStill('heroCv',sceneOpts(),'',
   const ds=dayStat();const g=S.settings.goal;$('todayTxt').textContent=`${ds.t} of ${g} tries · ${ds.g} goals · 今日試咗 ${ds.t} 次`;$('todayBar').style.width=Math.min(100,ds.t/g*100)+'%';
   const st=streak();$('streakTxt').textContent=st?`${st} day${st>1?'s':''} in a row · 連續 ${st} 日`:'';
   if(S.current&&S.current.kind==='tutorial'){S.current=null;}
+  if(S.current&&S.current.kind==='level'&&!stageById(S.current.stage)&&S.current.stage!=='mine'){S.current=null;save();}
   const cur=S.current;if(cur){const nm=cur.kind==='cup'?(()=>{const d=cupDef(cur.cupId);return {en:d.en,zh:d.zh};})():cur.kind==='tough'?{en:'Practice words',zh:'練習難字'}:levelName(cur.stage,cur.level);
     const sp=SPORTS.find(s=>s.id===cur.sport);$('resumeSub').textContent=`${sp.en} ${sp.zh} · ${nm.en} ${nm.zh} · ball ${Math.min(cur.idx+1,cur.items.length)} of ${cur.items.length}`;}
   else{const n=firstOpenLevel();const nm=levelName(n.stage,n.level);$('resumeSub').textContent=`Start: ${nm.en} · 開始：${nm.zh}`;}
@@ -1402,11 +1374,11 @@ $('tbBalls').onclick=()=>{storeTab='balls';confirmId=null;renderStore();};$('tbP
 
 /* ======================= CUP ======================= */
 const CUP_PRIZE={solar:[10000,4000,100],sunday:[1000,100,10],tour:[3000,300,30]};
-const CUP_POOLS=[['short','two'],['long','sent'],['verse','pray']];
+const CUP_POOLS=[['long'],['long','sent'],['verse','pray']];
 const TOUR=[
- {id:'tour-macau',en:'Macau Cup',zh:'澳門盃',place:'yuetwah',night:false,where:'Yuet Wah College, Macau · 澳門粵華中學',pools:[['warm','short'],['two'],['long']]},
- {id:'tour-america',en:'America Cup',zh:'美國盃',place:'lincoln',night:false,where:'Lincoln Memorial, Washington · 華盛頓林肯紀念堂',pools:[['short','two'],['long'],['sent']]},
- {id:'tour-olympic',en:'Olympic Cup',zh:'奧運盃',place:'olympic',night:false,where:'Olympic stadium · 奧運體育場',pools:[['two'],['long','sent'],['verse']]},
+ {id:'tour-macau',en:'Macau Cup',zh:'澳門盃',place:'yuetwah',night:false,where:'Yuet Wah College, Macau · 澳門粵華中學',pools:[['warm','long'],['long'],['sent']]},
+ {id:'tour-america',en:'America Cup',zh:'美國盃',place:'lincoln',night:false,where:'Lincoln Memorial, Washington · 華盛頓林肯紀念堂',pools:[['long'],['sent'],['sent','verse']]},
+ {id:'tour-olympic',en:'Olympic Cup',zh:'奧運盃',place:'olympic',night:false,where:'Olympic stadium · 奧運體育場',pools:[['long','sent'],['verse'],['verse']]},
  {id:'tour-starlight',en:'Starlight Cup',zh:'星光盃',place:'park',night:true,where:'Under the stars · 星空下',pools:[['long'],['sent'],['verse','pray']]},
  {id:'tour-galaxy',en:'Galaxy Cup',zh:'銀河盃',place:'alien',night:false,where:'Alien planet · 外星球',pools:[['sent'],['verse'],['pray']]}];
 const SUNDAY_PLACES=['yuetwah','lincoln','olympic','park'];
