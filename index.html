@@ -443,8 +443,8 @@ p{margin:0}
       <div class="panel steps">
         <div class="step"><div class="n">1</div><p>Pick a sport and a level.<span class="zh">揀一種運動同一個關卡。</span></p></div>
         <div class="step"><div class="n">2</div><p>Read the word on the ball. Tap <b>Hear it</b> to hear it first.<span class="zh">睇波上面嘅字。㩒「聽一次」可以先聽。</span></p></div>
-        <div class="step"><div class="n">3</div><p>Take a big breath. Hold the <b>SPACE</b> bar (or the yellow button) and say it loud and slow.<span class="zh">深呼吸。按住空白鍵（或者黃色大掣），大聲、慢慢講。</span></p></div>
-        <div class="step"><div class="n">4</div><p>Let go. Said it well: <b>GOAL!</b> Nearly there: it hits the post, and the game tells you how close you were. Missed: try again. You get as many tries as you like.<span class="zh">放手。講得好：入波！差少少：中柱，遊戲話你知有幾成。射歪咗：再試，試幾多次都得。</span></p></div>
+        <div class="step"><div class="n">3</div><p>Take a big breath and say it loud and slow. In <b>hands-free</b> mode (the usual setting) the game listens by itself, so no buttons are needed; tap anywhere to talk again or carry on. With hands-free off, hold the <b>SPACE</b> bar or the yellow button while you talk.<span class="zh">深呼吸，大聲、慢慢講。「免手」模式（平時都係咁）遊戲自己會聽，唔使㩒掣；想再講或者繼續，㩒任何地方都得。關咗免手，就要按住空白鍵或者黃色大掣講。</span></p></div>
+        <div class="step"><div class="n">4</div><p>Said it well: <b>GOAL!</b> Nearly there: it hits the post, and the game tells you how close you were. Missed: try again. You get as many tries as you like.<span class="zh">放手。講得好：入波！差少少：中柱，遊戲話你知有幾成。射歪咗：再試，試幾多次都得。</span></p></div>
         <div class="step"><div class="n">5</div><p>Five balls make a level. Every try wins coins. Finishing a level wins gold and diamonds.<span class="zh">五個波一關。每次試都有金幣，過關有金同鑽石。</span></p></div>
         <div class="step"><div class="n">6</div><p>Spend them in the <b>Store</b>: an orange ball, a watermelon ball, a gold ball, night lights, Yuet Wah College, even a stadium on Mars.<span class="zh">喺商店買橙波、西瓜波、金波、夜場燈光、粵華中學球場，仲有火星球場！</span></p></div>
         <div class="step"><div class="n">7</div><p><b>Cups:</b> a new <b>Sunday Cup</b> every week, the <b>Solar System Cup</b> on the last day of every month, and a <b>World Tour</b> of five Cups from Macau to an alien planet. Double coins and big prizes.<span class="zh">盃賽：每個星期日有主日盃，每個月最後一日有太陽系盃，仲有由澳門去到外星球嘅五個世界巡迴賽。雙倍金幣，大獎！</span></p></div>
@@ -453,7 +453,7 @@ p{margin:0}
         <h3>For family <span class="zh">給家人</span></h3>
         <ul class="tiplist">
           <li><b>After five strokes, go gently.</b> He may tire quickly, and some days will be harder than others. That's normal. Start with Warm-up or Prayers, keep it short, and finish on a goal he scores. <span class="zh">中過五次風，要慢慢嚟。佢可能好快攰，有啲日子會難啲，係正常嘅。由熱身或者禱文開始，玩短啲，最後一球要入。</span></li>
-          <li><b>Use his stronger hand.</b> He can hold the space bar, or tap the yellow button once to start and once to stop. <span class="zh">用佢有力嗰隻手。按住空白鍵，或者㩒一下開始、再㩒一下停。</span></li>
+          <li><b>No hands needed.</b> Hands-free mode says the word, listens, scores, tries again, and moves on to the next ball and the next level by itself. If it hears nothing twice it pauses; any tap anywhere carries on. Someone just needs to open the link and tap once to start (and allow the microphone the first time). Turn it off under Family if he'd rather press a button. <span class="zh">免手模式自己讀、自己聽、自己計分、自己去下一個波同下一關。兩次聽唔到就會暫停，㩒任何地方繼續。家人只要開條連結、㩒一下開始（第一次要准用咪高峰）。喺「家人設定」可以關。</span></li>
           <li><b>Little and often.</b> 10–15 minutes once or twice a day works better than one long session. The daily goal on the home screen helps. <span class="zh">少量多次：每日一至兩次，每次十至十五分鐘。</span></li>
           <li><b>Sit him upright, with water nearby.</b> Stop if he is tired, frustrated, coughing or dizzy. <span class="zh">坐直，身邊放杯水。攰、唔開心、咳或者頭暈就停。</span></li>
           <li><b>Big breath, then loud and slow.</b> Louder, slower speech is clearer speech. The beat dots help him pace one syllable at a time. <span class="zh">深呼吸，大聲、慢慢講。跟住點點一個字一個字講。</span></li>
@@ -508,6 +508,7 @@ p{margin:0}
           </select>
         </div>
         <div class="field">
+          <label class="check" id="sHandsRow"><input type="checkbox" id="sHands"> <b>Hands-free:</b> the game says the word, listens by itself and moves on. No buttons to hold; tap anywhere to talk or carry on. <span class="zh">免手：遊戲自己讀、自己聽、自己行落去，唔使㩒住掣；㩒任何地方都得。</span></label>
           <label class="check"><input type="checkbox" id="sModel"> Say each word for him first (easier) <span class="zh">每個字先讀俾佢聽（易啲）</span></label>
           <label class="check"><input type="checkbox" id="sVoice"> Game says "Great job!" out loud <span class="zh">遊戲讀出「好叻呀！」</span></label>
         </div>
@@ -703,7 +704,7 @@ function freshState(){return {v:1,updatedAt:0,coins:0,gold:0,gems:0,
   owned:{ball:['classic'],place:['park'],night:false},
   equip:{ball:'classic',place:'park',night:false},
   sport:'soccer',lang:'en',levels:{},current:null,days:{},items:{},cups:{},
-  settings:{judge:'auto',strict:'gentle',modelFirst:true,voice:true,goal:10,restMin:10,unlockAll:false,cupEarly:false,sound:true,custom:'',verses:''}};}
+  settings:{judge:'auto',strict:'gentle',handsFree:true,modelFirst:true,voice:true,goal:10,restMin:10,unlockAll:false,cupEarly:false,sound:true,custom:'',verses:''}};}
 function mergeDefaults(s){const d=freshState();if(!s||typeof s!=='object')return d;
   const o=Object.assign(d,s);o.owned=Object.assign(freshState().owned,s.owned||{});o.equip=Object.assign(freshState().equip,s.equip||{});
   o.settings=Object.assign(freshState().settings,s.settings||{});['levels','days','items','cups'].forEach(k=>{if(!o[k]||typeof o[k]!=='object')o[k]={}});return o;}
@@ -1220,10 +1221,21 @@ function showBall(){const c=P_.cur;clearTimeout(P_.autoNext);P_.last=null;if(P_.
   $('banner').hidden=true;$('heard').textContent='';$('judgeBox').hidden=micUsable(iLang());if(!micUsable(iLang()))$('judgeLbl').textContent='Coach: after he says it, tap one. 教練：講完之後㩒一個。';$('nextBtn').hidden=true;P_.busy=false;P_.attempts=c.tries[c.idx]||0;setTalk('idle');renderKicks();
   const speakOk=canSpeak(iLang());['cHear','cSlow','cTog'].forEach(id=>$(id).disabled=!speakOk);
   if(!speakOk&&iLang()==='zh'){$('heard').textContent='No Cantonese voice on this device. Family can read it to him. 呢部機冇廣東話聲，請家人讀一次。';}
-  if(S.settings.modelFirst&&speakOk&&!(c.tries[c.idx])&&!TUT)setTimeout(()=>{if(screen==='play'&&curItem()===it&&!P_.listening)speakModel(1);},450);}
+  if(S.settings.modelFirst&&speakOk&&!(c.tries[c.idx])&&!TUT)setTimeout(()=>{if(screen==='play'&&curItem()===it&&!P_.listening)speakModel(1);},450);
+  if(HF()&&!TUT)hfListen(S.settings.modelFirst&&speakOk?900:600);}
 function setTalk(st){const b=$('talkBtn');b.classList.toggle('listening',st==='listening');b.classList.toggle('busy',st==='busy');
   const coach=!micUsable(iLang());
-  $('talkTxt').innerHTML=st==='listening'?(coach?'Saying it… let go when done<br><span class="zh">講緊…講完放手</span>':'Listening… let go when done<br><span class="zh">聽緊…講完放手</span>'):st==='busy'?'Checking…<br><span class="zh">睇吓…</span>':'Hold and say it<br><span class="zh">按住，講出嚟</span>';}
+  const hf=HF()&&!coach;$('sc-play').classList.toggle('handsfree',hf);
+  $('talkTxt').innerHTML=st==='listening'?(coach?'Saying it… let go when done<br><span class="zh">講緊…講完放手</span>':hf?'Listening… just say it<br><span class="zh">聽緊…講出嚟就得</span>':'Listening… let go when done<br><span class="zh">聽緊…講完放手</span>'):st==='busy'?'Checking…<br><span class="zh">睇吓…</span>':hf?(P_.hfPaused?'Paused · tap anywhere to go on<br><span class="zh">暫停 · 㩒任何地方繼續</span>':'Get ready to say it…<br><span class="zh">準備講…</span>'):'Hold and say it<br><span class="zh">按住，講出嚟</span>';}
+/* hands-free: the game listens by itself after saying the word, and keeps going; any tap anywhere is the only control */
+const HF=()=>!IN_CLAUDE&&!window.__NO_HF&&!!dict&&S.settings.handsFree!==false;let hfT=null;
+const QT={};function hfClear(){clearTimeout(hfT);hfT=null;clearTimeout(QT.hf);}
+function whenQuiet(fn,ms,k='hf'){clearTimeout(QT[k]);const t0=Date.now();const tick=()=>{let busy=false;try{busy=window.speechSynthesis&&(speechSynthesis.speaking||speechSynthesis.pending);}catch(e){}if(busy&&Date.now()-t0<20000){QT[k]=setTimeout(tick,200);return;}QT[k]=setTimeout(fn,ms);};QT[k]=setTimeout(tick,250);}
+function hfListen(delay){hfClear();if(!HF()||screen!=='play'||!P_.cur)return;const it=curItem();
+  hfT=setTimeout(()=>whenQuiet(()=>{if(!HF()||screen!=='play'||!P_.cur||curItem()!==it||P_.listening||P_.busy||P_.hfPaused||document.querySelector('.modal')||!micUsable(iLang()))return;
+    if(TUT&&TUT_STEPS[TUT.i].wait!=='result')return;if(P_.last&&P_.last.g==='great'&&!$('banner').hidden)return;P_.byKey=false;pressStart('auto');},400),delay||0);}
+function hfNothing(){if(!HF())return;P_.hfQuiet=(P_.hfQuiet||0)+1;if(P_.hfQuiet<2){hfListen(1200);return;}P_.hfPaused=true;setTalk('idle');$('heard').textContent+=' · Paused. Tap anywhere to keep going. 暫停：㩒一下繼續。';}
+
 async function speakModel(mode){const it=curItem();if(!it)return;tutEvent('hear');const lang=iLang();const beats=[...$('tBeats').children];
   if(mode===1){await speak(it.text,lang,.85);return;}
   const rate=mode===2?.6:.7;const n=beats.length;let i=0;const est=(lang==='zh'?.55:.42)/rate*1000;let timer=null;
@@ -1233,14 +1245,15 @@ $('cHear').onclick=()=>speakModel(1);$('cSlow').onclick=()=>speakModel(2);
 $('cTog').onclick=async()=>{$('heard').textContent='Say it along with me. 跟住我一齊講。';await speakModel(3);$('heard').textContent='Now you try on your own. 而家自己試吓。';};
 
 /* talking: hold SPACE / the yellow button (tap once to start, again to stop also works) */
-function pressStart(){if(screen!=='play'||P_.busy)return;ac();if(P_.listening){if(P_.tap){P_.tap=false;finishListening();}return;}
+function pressStart(mode){if(screen!=='play'||P_.busy)return;if(mode!=='auto')ac();hfClear();if(P_.listening){if(P_.tap){P_.tap=false;finishListening();}return;}if(mode!=='auto'){P_.hfPaused=false;P_.hfQuiet=0;}
   if(P_.last&&P_.last.g==='great'&&!$('banner').hidden&&P_.cur.results[P_.cur.idx]==='great'){P_.skipKeyUp=true;nextBall();return;}clearTimeout(P_.autoNext);
   const lang=iLang();
   if(!IN_CLAUDE&&hasMic===false&&micUsable(lang)){stopSpeak();$('banner').hidden=true;$('heard').textContent=noMicMsg();showJudge(true);checkMic();return;}
-  stopSpeak();P_.heard='';P_.partial='';P_.alts=[];P_.pressAt=performance.now();P_.listening=true;P_.tap=false;P_.lastHeardAt=0;P_.startAt=performance.now();
+  stopSpeak();P_.heard='';P_.partial='';P_.alts=[];P_.pressAt=performance.now();P_.listening=true;P_.tap=!!mode;P_.lastHeardAt=0;P_.startAt=performance.now();
   $('judgeBox').hidden=micUsable(lang)?true:false;$('banner').hidden=true;setTalk('listening');
   if(micUsable(lang)){const opts=lang==='zh'?{language:'zh-HK'}:{language:'en'};if(!IN_CLAUDE&&!window.__micHint){window.__micHint=1;toast(location.protocol==='https:'&&!/iPhone|iPad|iPod/.test(navigator.userAgent)?'The browser will ask to use the microphone. Choose "Allow while visiting the site" and it won\'t ask again. 瀏覽器會問用唔用咪高峰，揀「瀏覽網站時允許」，以後唔會再問。':'The browser will ask once to use the microphone. Choose Allow. 瀏覽器會問一次用唔用咪高峰，揀「允許」。',7000);}
     dict.start(opts).catch(err=>{const code=err&&err.code;
+      if(mode==='auto'&&code==='not_granted'&&!P_.hfAsked){P_.hfAsked=true;P_.hfPaused=true;P_.listening=false;setTalk('idle');$('heard').textContent='Tap anywhere to start listening. 㩒一下開始聽。';return;}
       if(code==='cancelled'){if(!P_.listening&&err.ready&&screen==='play')$('heard').textContent='The microphone is ready. Hold SPACE (or the yellow button) and say the word. 咪高峰準備好喇，按住空白鍵（或者黃色掣）講。';return;}
       P_.listening=false;setTalk('idle');
       if(code==='unavailable'){dictLangFail[lang]=true;$('heard').textContent=lang==='zh'?'The game can\'t listen in Cantonese here, so family will be the coach. 呢度聽唔到廣東話，請家人做教練。':'Listening isn\'t available here, so family will be the coach. 請家人做教練。';showJudge();}
@@ -1252,7 +1265,7 @@ function pressStart(){if(screen!=='play'||P_.busy)return;ac();if(P_.listening){i
       else if(code==='rate_limited'){$('heard').textContent='One moment, then try again. 等一陣再試。';}
       else{$('heard').textContent=IN_CLAUDE?'The microphone had a problem. Coach can judge this one. 咪高峰有問題，請教練判斷。':'Couldn\'t listen. Check the internet and the microphone. The coach can judge this one. 聽唔到：請檢查上網同咪高峰，今次請教練判斷。';showJudge();}});
     P_.watch=setInterval(()=>{if(!P_.listening){clearInterval(P_.watch);return;}const now=performance.now();const it=curItem();const maxMs=7000+beatsOf(it.text)*900;
-      if(P_.tap&&P_.heard&&P_.lastHeardAt&&now-P_.lastHeardAt>2600)finishListening();else if(now-P_.startAt>maxMs+(P_.tap?0:30000))finishListening();},300);}}
+      if(P_.tap&&(P_.heard||P_.partial)&&P_.lastHeardAt&&now-P_.lastHeardAt>(HF()?3000:2600))finishListening();else if(now-P_.startAt>maxMs+(P_.tap?0:30000))finishListening();},300);}}
 function pressEnd(){if(P_.skipKeyUp){P_.skipKeyUp=false;return;}if(!P_.listening)return;const held=performance.now()-P_.pressAt;if(held<350&&!P_.tap){P_.tap=true;$('talkTxt').innerHTML=micUsable(iLang())?'Listening… tap again when done<br><span class="zh">聽緊…講完再㩒</span>':'Saying it… tap again when done<br><span class="zh">講緊…講完再㩒</span>';return;}finishListening();}
 async function finishListening(){if(!P_.listening)return;P_.listening=false;clearInterval(P_.watch);const lang=iLang();
   if(!micUsable(lang)){setTalk('idle');showJudge();return;}
@@ -1262,10 +1275,10 @@ async function finishListening(){if(!P_.listening)return;P_.listening=false;clea
   const inf=dict&&dict.info,silent=!!inf&&(inf.peak>=0?inf.peak<.015:(inf.audio&&!inf.sound));
   if(!heard&&noSpeechBrowser()){dictLangFail.en=dictLangFail.zh=true;$('heard').textContent=wrongBrowserMsg();showJudge(true);return;}
   if(!heard&&silent&&!(dict.lastError==='network'||dict.lastError==='audio-capture')){$('heard').textContent=/Macintosh/.test(navigator.userAgent)?'No sound reached the microphone. Check that a microphone is plugged in and chosen (Apple menu › System Settings › Sound › Input). A Mac mini has no microphone of its own. 咪高峰收唔到聲：請接駁咪高峰，再喺「系統設定›聲音›輸入」揀返佢。':'No sound reached the microphone. Check that the microphone is plugged in, switched on and not muted. 咪高峰收唔到聲：請檢查咪高峰有冇接好、有冇開、有冇靜音。';showJudge(true);return;}
-  if(!heard){$('heard').textContent=(dict&&dict.lastError==='network')?'Listening needs the internet. Check the Wi-Fi, or the coach can judge for now. 要上網先聽到，請檢查Wi-Fi，或者教練判斷。':(dict&&dict.lastError==='audio-capture')?noMicMsg():'I didn\'t hear anything. Try a big breath and a louder voice. 聽唔到，深呼吸大聲啲再試。';showJudge(true);return;}
+  if(!heard){$('heard').textContent=(dict&&dict.lastError==='network')?'Listening needs the internet. Check the Wi-Fi, or the coach can judge for now. 要上網先聽到，請檢查Wi-Fi，或者教練判斷。':(dict&&dict.lastError==='audio-capture')?noMicMsg():'I didn\'t hear anything. Try a big breath and a louder voice. 聽唔到，深呼吸大聲啲再試。';showJudge(true);if(!(dict&&(dict.lastError==='network'||dict.lastError==='audio-capture')))hfNothing();return;}
   const cands=[heard];const A=P_.alts||[];if(A.length)for(let k=0;k<3;k++){const t=A.map(a=>a[Math.min(k,a.length-1)]).join(' ').trim();if(t)cands.push(t);}
   let pct=-1,best=heard;for(const cnd of cands){const sc=scoreSpeech(curItem().text,cnd,lang);if(sc>pct){pct=sc;best=cnd;}}
-  const g=gradeOf(pct);$('heard').textContent=`I heard: "${best}" · 聽到：「${best}」`;resolveAttempt(g,pct,true);}
+  P_.hfQuiet=0;const g=gradeOf(pct);$('heard').textContent=`I heard: "${best}" · 聽到：「${best}」`;resolveAttempt(g,pct,true);}
 function stopListening(silent){P_.listening=false;clearInterval(P_.watch);try{dict&&dict.stop();}catch(e){}if(!silent)setTalk('idle');}
 function showJudge(noHeard){$('judgeLbl').textContent=noHeard?'Or the coach can decide: 或者教練判斷：':'Coach: how was it? 教練：講得點？';$('judgeBox').hidden=false;}
 const tb=$('talkBtn');
@@ -1312,7 +1325,9 @@ function showResult(g,pct,coins,auto){const c=P_.cur;const [big,zbig]=FEED[c.spo
   setTimeout(()=>tutEvent('result'),0);
   if(g==='great'&&c.kind==='tutorial'){$('nextBtn').hidden=false;}
   else if(g==='great'){$('nextBtn').hidden=false;const me=P_,ball=P_.cur.idx;clearTimeout(P_.autoNext);P_.autoNext=setTimeout(()=>{if(P_===me&&screen==='play'&&P_.cur.idx===ball&&P_.last&&P_.last.g==='great'&&!$('banner').hidden&&!P_.listening&&!P_.busy)nextBall();},3200);}
-  else{$('nextBtn').hidden=false;if(!micUsable(c.lang)){$('judgeLbl').textContent='Try again, then tap one. 再試，然後㩒一個。';$('judgeBox').hidden=false;}if(P_.attempts>=3)$('heard').textContent+=(($('heard').textContent?' · ':'')+'Tough one! Try Hear it or Together, or move on and come back later. 難啲！可以聽一次、一齊講，或者下一個。');}}
+  else{$('nextBtn').hidden=false;
+    if(HF()&&c.kind!=='tutorial'&&micUsable(c.lang)){const ball=c.idx;if(P_.attempts>=3){$('heard').textContent+=' · Let\'s try the next one. 試下一個。';hfClear();hfT=setTimeout(()=>whenQuiet(()=>{if(screen==='play'&&P_.cur===c&&c.idx===ball&&!P_.listening&&!P_.busy&&!document.querySelector('.modal'))nextBall();},1200),300);}else hfListen(500);}
+    if(!micUsable(c.lang)){$('judgeLbl').textContent='Try again, then tap one. 再試，然後㩒一個。';$('judgeBox').hidden=false;}if(P_.attempts>=3)$('heard').textContent+=(($('heard').textContent?' · ':'')+'Tough one! Try Hear it or Together, or move on and come back later. 難啲！可以聽一次、一齊講，或者下一個。');}}
 function applyOverride(g){clearTimeout(P_.autoNext);const c=P_.cur;const old=P_.last;if(!old||old.g===g)return;
   logAttempt(old.g,-1);logAttempt(g,1);const mult=c.kind==='cup'?2:1;S.coins+=(PER_TRY[g]-PER_TRY[old.g])*mult;
   // recompute best result for this ball from the corrected attempt
@@ -1323,8 +1338,11 @@ function nextBall(){clearTimeout(P_.autoNext);const c=P_.cur;if(!c.results[c.idx
   if(c.kind==='tutorial'){if(c.idx>=c.items.length){c.idx=c.items.length-1;}showBall();return;}
   const mins=(Date.now()-P_.sessionStart)/60000;if(!P_.restShown&&mins>=S.settings.restMin&&c.idx<c.items.length){P_.restShown=true;restModal();return;}showBall();}
 $('nextBtn').onclick=nextBall;
+$('sc-play').addEventListener('pointerdown',e=>{if(!HF()||e.button>0||!micUsable(iLang()))return;if(TUT&&TUT_STEPS[TUT.i].wait!=='result')return;if(e.target.closest('button,a,input,select,textarea,label,.modal'))return;e.preventDefault();P_.byKey=false;pressStart(true);});
+$('sc-done').addEventListener('pointerdown',e=>{const a=document.getElementById('dAuto');if(a&&!e.target.closest('#dNext')){clearTimeout(P_.doneT);a.remove();}});
 function restModal(){const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="box"><h3>Great work today! <span class="zh">今日好叻！</span></h3><p>You've been practising for ${S.settings.restMin} minutes. Time for a rest and a drink of water? <span class="zh">練咗${S.settings.restMin}分鐘，休息吓，飲啖水？</span></p><div class="row" style="justify-content:center"><button class="btn primary" id="mRest">Rest now 休息</button><button class="btn" id="mGo">Keep playing 繼續</button></div></div>`;
-  document.body.appendChild(m);m.querySelector('#mRest').onclick=()=>{m.remove();show('home');};m.querySelector('#mGo').onclick=()=>{m.remove();showBall();};}
+  document.body.appendChild(m);m.querySelector('#mRest').onclick=()=>{m.remove();show('home');};m.querySelector('#mGo').onclick=()=>{m.remove();showBall();};
+  if(HF()){const p=document.createElement('p');p.style.cssText='margin-top:10px;color:var(--muted)';p.textContent='The game carries on by itself in 1 minute. 一分鐘後自動繼續。';m.querySelector('.box').appendChild(p);setTimeout(()=>{if(m.isConnected&&screen==='play'){m.remove();showBall();}},60000);}}
 
 /* level / cup complete */
 function finishRun(){const c=P_.cur;if(c.kind==='tutorial'){S.current=null;save();show('home');return;}playing=false;const greats=c.results.filter(r=>r==='great').length;const n=c.items.length;const ratio=greats/n;
@@ -1345,6 +1363,8 @@ function finishRun(){const c=P_.cur;if(c.kind==='tutorial'){S.current=null;save(
   const nx=c.kind==='level'?nextLevelFrom(c.stage,c.level):null;$('dNext').hidden=!nx;$('dNext').onclick=()=>{if(nx)beginLevel(nx.stage,nx.level);};
   $('dAgain').onclick=()=>{if(c.kind==='level')beginLevel(c.stage,c.level);else if(c.kind==='cup')show('cup');else startTough();};$('dHome').onclick=()=>show('home');
   show('done');renderWallet(true);if(prize.some(v=>v)){sfx('cheer');}
+  if(HF()&&nx){let n=12;const el=document.createElement('p');el.id='dAuto';el.style.cssText='font-size:18px;font-weight:700;margin:8px 0 0';$('dAdvice').after(el);
+    const tick=()=>{if(screen!=='done'||!document.getElementById('dAuto'))return;if(n<=0){el.remove();beginLevel(nx.stage,nx.level);return;}el.textContent=`Next level starts in ${n}… tap anywhere to stay here. 下一關${n}秒後開始，㩒一下留低。`;n--;P_.doneT=setTimeout(tick,1000);};tick();}
   if(S.settings.voice)speak(c.lang==='zh'?'好叻呀！過關！':'Great job! Level complete!',c.lang,1);}
 
 /* ======================= STORE ======================= */
@@ -1453,11 +1473,11 @@ function renderProgress(){const ds=dayStat();const st=streak();const w0=weekSum(
   $('toughGo').hidden=!toughItems(S.lang).length;renderTrophies($('pgTrophies'));}
 
 /* ======================= FAMILY ======================= */
-function renderFamily(){const s=S.settings;$('sJudge').value=s.judge;$('sStrict').value=s.strict;$('sModel').checked=!!s.modelFirst;$('sVoice').checked=!!s.voice;$('sGoal').value=String(s.goal);$('sRest').value=String(s.restMin);$('sCustom').value=s.custom||'';$('sVerses').value=s.verses||'';renderRefCount();$('sUnlock').checked=!!s.unlockAll;$('sCupEarly').checked=!!s.cupEarly;
+function renderFamily(){const s=S.settings;$('sJudge').value=s.judge;$('sStrict').value=s.strict;$('sModel').checked=!!s.modelFirst;$('sHands').checked=s.handsFree!==false;$('sHandsRow').hidden=IN_CLAUDE;$('sVoice').checked=!!s.voice;$('sGoal').value=String(s.goal);$('sRest').value=String(s.restMin);$('sCustom').value=s.custom||'';$('sVerses').value=s.verses||'';renderRefCount();$('sUnlock').checked=!!s.unlockAll;$('sCupEarly').checked=!!s.cupEarly;
   $('micNote').textContent=IN_CLAUDE?(dict?'Listening works here. It isn\'t perfect with slurred speech, so the coach can change any result. 呢度可以聽。':'Listening needs Chrome or the Claude desktop app on a computer. Here a family member taps Goal, Almost or Missed after he speaks. 呢部機唔可以聽，請家人做教練。'):(dict?(/iPhone|iPad|iPod/.test(navigator.userAgent)?'Listening uses the iPhone\'s own speech recognition in Safari, so it needs the internet and Dictation turned on (Settings › General › Keyboard). To stop Safari asking about the microphone, tap aA › Website Settings › Microphone › Allow. The coach can change any result. 要上網同開咗「聽寫」。':(noSpeechBrowser()?wrongBrowserMsg():'Listening uses this browser\'s speech service, so it needs the internet. It works best in Microsoft Edge or Google Chrome.'+` (This is ${browserName()}.)`)+' It isn\'t perfect with slurred speech, so the coach can change any result. 要上網先聽到。'):'This browser can\'t listen. Open the game in Microsoft Edge or Google Chrome, or let a family member be the coach. 呢個瀏覽器聽唔到，請用Edge或者Chrome，或者家人做教練。');renderSyncNote();}
 function renderSyncNote(){const el=$('syncNote');if(!el)return;if(!IN_CLAUDE){el.textContent='Progress is saved in this browser on this device. Save a backup file now and then (below). 進度存喺呢部機，記得間中存備份。';return;}el.textContent=dbRef?(dbStatus==='error'?'Progress is saved on this device; syncing will retry. 進度已存喺呢部機。':'Progress is saved to his account, so it carries over between devices. 進度會同步。'):'Progress is saved in this browser. 進度存喺呢個瀏覽器。';}
 const bindSet=(id,key,conv)=>$(id).addEventListener('change',e=>{const el=e.target;S.settings[key]=conv?conv(el):el.value;save();if(key==='judge'){dictLangFail={};}});
-bindSet('sJudge','judge');bindSet('sStrict','strict');bindSet('sModel','modelFirst',el=>el.checked);bindSet('sVoice','voice',el=>el.checked);bindSet('sGoal','goal',el=>+el.value);bindSet('sRest','restMin',el=>+el.value);
+bindSet('sJudge','judge');bindSet('sStrict','strict');bindSet('sModel','modelFirst',el=>el.checked);bindSet('sHands','handsFree',el=>{if(!el.checked)hfClear();return el.checked;});bindSet('sVoice','voice',el=>el.checked);bindSet('sGoal','goal',el=>+el.value);bindSet('sRest','restMin',el=>+el.value);
 bindSet('sUnlock','unlockAll',el=>el.checked);bindSet('sCupEarly','cupEarly',el=>el.checked);
 let customT=null;$('sCustom').addEventListener('input',e=>{clearTimeout(customT);customT=setTimeout(()=>{S.settings.custom=e.target.value;save();},700);});
 function renderRefCount(){const refs=allVerseRefs();const ov=myVerses();const n=refs.filter(r=>ov[normRef(r)]).length;$('refCount').textContent=`${n} of ${refs.length} verses use your wording. 已用你嘅譯本：${n}/${refs.length}節。`;}
@@ -1485,12 +1505,12 @@ const TUT_STEPS=[
  {id:'lang',en:'Which language do you want to practise? You can change it any time.',zh:'你想練邊種語言？之後隨時可以改。',langs:true},
  {id:'ball',target:['.pitch'],en:'This is your ball. The word to say is written on it.',zh:'呢個係你嘅波，要講嘅字寫喺波上面。',enter:()=>tutPlay()},
  {id:'card',target:['.card'],en:'The same word is here, big and clear, with its meaning underneath.',zh:'呢度都有同一個字，又大又清楚，下面係佢嘅意思。',enter:()=>tutPlay()},
- {id:'hear',target:['#cHear'],wait:'hear',en:'Tap "Hear it" to hear how the word sounds.',zh:'㩒「聽一次」，聽吓個字點讀。',waitEn:'Your turn: tap the lit-up button.',waitZh:'輪到你：㩒發光嘅掣。',enter:()=>tutPlay()},
+ {id:'hear',target:['#cHear'],wait:'hear',en:'Tap "Hear it" to hear how the word sounds.',zh:'㩒「聽一次」，聽吓個字點讀。',hfEn:'"Hear it" plays the word again whenever you want. Listen.',hfZh:'「聽一次」可以隨時再讀個字。聽吓。',waitEn:'Your turn: tap the lit-up button.',waitZh:'輪到你：㩒發光嘅掣。',enter:()=>tutPlay()},
  {id:'talk',target:['.talkcol'],wait:'result',en:'Take a big breath. Hold the yellow button (or the SPACE bar), say the word loud and slow, then let go.',zh:'深呼吸。按住黃色掣（或者空白鍵），大聲、慢慢講個字，講完放手。',
-  coachEn:'Take a big breath and say the word, loud and slow. Then your family taps Goal, Almost or Missed.',coachZh:'深呼吸，大聲、慢慢講個字。然後家人㩒「入波」、「差少少」或者「再試」。',waitEn:'Your turn: say the word.',waitZh:'輪到你：講個字。',enter:()=>tutPlay()},
+  hfEn:'Take a big breath and say the word, loud and slow. The game is listening by itself, no buttons needed.',hfZh:'深呼吸，大聲、慢慢講個字。遊戲自己會聽，唔使㩒掣。',coachEn:'Take a big breath and say the word, loud and slow. Then your family taps Goal, Almost or Missed.',coachZh:'深呼吸，大聲、慢慢講個字。然後家人㩒「入波」、「差少少」或者「再試」。',waitEn:'Your turn: say the word.',waitZh:'輪到你：講個字。',enter:()=>tutPlay()},
  {id:'result',target:['#banner','.pitch'],en:'Goal means great! Off the post means almost there. Wide means try again. Every try wins coins.',zh:'入波即係好叻！中柱即係差少少。射歪就再試。每次試都有金幣。'},
- {id:'help',target:['.cues'],en:'If a word is hard, tap "Slow beats" or "Together" and say it along with the game. You can try as many times as you like.',zh:'如果個字難，㩒「慢慢拍住講」或者「一齊講」，跟住遊戲講。試幾多次都得。'},
- {id:'next',target:['#nextBtn','.talkcol'],wait:'next',en:'Tap "Next ball" when you are ready for the next word.',zh:'準備好就㩒「下一個」。',waitEn:'Your turn: tap Next ball.',waitZh:'輪到你：㩒「下一個」。'},
+ {id:'help',target:['.cues'],hfEn:'If a word is hard, the game listens again so you can have another go. After three tries it moves on to the next word.',hfZh:'如果個字難，遊戲會再聽，你可以再試。試三次之後就會去下一個字。',en:'If a word is hard, tap "Slow beats" or "Together" and say it along with the game. You can try as many times as you like.',zh:'如果個字難，㩒「慢慢拍住講」或者「一齊講」，跟住遊戲講。試幾多次都得。'},
+ {id:'next',target:['#nextBtn','.talkcol'],wait:'next',hfEn:'After a goal, the next ball comes by itself. Here it comes!',hfZh:'入波之後，下一個波會自己嚟。嚟喇！',en:'Tap "Next ball" when you are ready for the next word.',zh:'準備好就㩒「下一個」。',waitEn:'Your turn: tap Next ball.',waitZh:'輪到你：㩒「下一個」。'},
  {id:'two',target:['.talkcol'],wait:'result',en:'One more! Say this word.',zh:'再嚟一個！講呢個字。',waitEn:'Your turn: say the word.',waitZh:'輪到你：講個字。'},
  {id:'home',target:['.homegrid'],en:'At home: Resume carries on where you stopped. Cups give big prizes. The Store has new balls and fields.',zh:'主頁：「繼續」由上次停低嘅地方開始。「盃賽」有大獎。「商店」有新波同新球場。',noBack:true,enter:()=>{if(screen==='play'){S.current=null;save();}if(screen!=='home')show('home');}},
  {id:'done',en:'You\'re ready! Here is a welcome gift: 200 coins and 1 diamond. Your diamond can buy the Yuet Wah College field in the Store!',zh:'準備好喇！送你見面禮：200金幣同1粒鑽石。用鑽石可以喺商店買粵華中學球場！',
@@ -1521,8 +1541,8 @@ function tutPlace(){if(!TUT||!TUT.els)return;const st=TUT_STEPS[TUT.i];const {sp
   else{card.classList.toggle('tight',vh<720);card.style.maxHeight='';spot.style.display='none';shade.style.display='block';setRect(blocks[0],0,0,vw,vh);blocks.slice(1).forEach(b=>setRect(b,0,0,0,0));
     card.style.top=Math.max(8,(vh-card.offsetHeight)/2)+'px';card.style.left=Math.max(8,(vw-card.offsetWidth)/2)+'px';}}
 function tutSay(){if(!TUT||!TUT.spoke||!S.settings.voice)return;const st=TUT_STEPS[TUT.i];const l=tutLang();const t=tutText(st,l);if(canSpeak(l))speak(t,l,.9);}
-function tutText(st,l){const coach=st.coachEn&&!micUsable(S.lang==='zh'?'zh':'en');const again=st.againEn&&S.tutorialDone&&!TUT.gift;
-  const t=l==='zh'?(coach?st.coachZh:again?st.againZh:st.zh):(coach?st.coachEn:again?st.againEn:st.en);
+function tutText(st,l){const coach=st.coachEn&&!micUsable(S.lang==='zh'?'zh':'en');const again=st.againEn&&S.tutorialDone&&!TUT.gift;const hf=st.hfEn&&!coach&&HF();
+  const t=l==='zh'?(coach?st.coachZh:hf?st.hfZh:again?st.againZh:st.zh):(coach?st.coachEn:hf?st.hfEn:again?st.againEn:st.en);
   return $('talkKey').textContent==='TAP'?t.replace(' (or the SPACE bar)','').replace('（或者空白鍵）',''):t;}
 function tutRender(){const st=TUT_STEPS[TUT.i];const {card}=tutEls();card.innerHTML='';
   const body=document.createElement('div');body.className='tbody';card.appendChild(body);
@@ -1540,13 +1560,17 @@ function tutRender(){const st=TUT_STEPS[TUT.i];const {card}=tutEls();card.innerH
 function tutGo(i){if(!TUT)return;i=Math.max(0,Math.min(TUT_STEPS.length-1,i));TUT.i=i;const st=TUT_STEPS[i];stopSpeak();
   if(st.enter)st.enter();tutRender();tutPlace();
   const show_=()=>{if(!TUT||TUT.i!==i)return;const el=tutTarget(st);if(el&&el.scrollIntoView){const r=el.getBoundingClientRect();const big=r.height>=innerHeight*.45,small=innerHeight<720&&!big;el.scrollIntoView({block:big?'start':small?'end':'center',inline:'nearest'});if(small)window.scrollBy(0,12);}tutPlace();requestAnimationFrame(tutPlace);};
-  setTimeout(show_,60);setTimeout(show_,400);tutSay();
+  setTimeout(show_,60);setTimeout(show_,400);tutSay();if(HF()&&TUT.spoke)tutAuto(i);
   const f=TUT.els.card.querySelector('#tutNext,#tutLang-en');if(f)try{f.focus({preventScroll:true});}catch(e){}}
+function tutAuto(i){const st=TUT_STEPS[i];const l=tutLang();const spoken=S.settings.voice&&canSpeak(l);const read=spoken?1500:Math.min(9000,1800+tutText(st,'en').length*45);
+  whenQuiet(()=>{if(!TUT||TUT.i!==i||!HF())return;
+    if(st.wait==='hear')speakModel(1);else if(st.wait==='result')hfListen(0);else if(st.wait==='next'){if(screen==='play')nextBall();}
+    else if(i===TUT_STEPS.length-1)tutEnd(true);else tutGo(i+1);},st.langs?5000:read,'tut');}
 function tutEvent(type){if(!TUT)return;const st=TUT_STEPS[TUT.i];
   if(st.wait===type){const at=TUT.i;setTimeout(()=>{if(TUT&&TUT.i===at)tutGo(at+1);},type==='result'?1500:type==='hear'?1200:300);}
   else setTimeout(()=>requestAnimationFrame(tutPlace),30);}
 function tutStart(){if(TUT)return;ac();TUT={i:0,spoke:false,gift:false};tutEls();if(screen!=='home')show('home');tutGo(0);}
-function tutEnd(finished){if(!TUT)return;stopSpeak();const was=TUT;TUT=null;if(was.els)was.els.root.remove();S.tutorialSeen=true;
+function tutEnd(finished){if(!TUT)return;clearTimeout(QT.tut);stopSpeak();const was=TUT;TUT=null;if(was.els)was.els.root.remove();S.tutorialSeen=true;
   if(screen==='play'&&P_.cur&&P_.cur.kind==='tutorial'){S.current=null;save();show('home');}else save();
   if(finished){const n=firstOpenLevel();beginLevel(n.stage,n.level);}else renderHome();}
 window.addEventListener('resize',()=>{if(TUT)requestAnimationFrame(tutPlace);});
