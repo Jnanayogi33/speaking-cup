@@ -149,6 +149,8 @@ p{margin:0}
 .cue:hover{background:#DCE4EF}
 .cue[disabled]{opacity:.4}
 .talkcol{display:flex;flex-direction:column;gap:10px}
+/* short phones (iPhone SE): every item is a verse or prayer line now, so keep the talk button on screen */
+@media (max-height:700px) and (max-width:900px){.talkcol{position:sticky;bottom:0;z-index:7;padding:14px 0 calc(8px + env(safe-area-inset-bottom,0px));margin-top:-14px;background:linear-gradient(to bottom,transparent,var(--night) 14px)}}
 .talk{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;flex:1;min-height:120px;border-radius:18px;background:var(--score);color:var(--score-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   font-weight:700;font-size:20px;text-align:center;padding:12px;border:4px solid #FFE58A;user-select:none;-webkit-user-select:none;touch-action:none;position:relative}
 .talk .key{font-family:var(--f-display);font-size:30px;background:#231A00;color:var(--score);border-radius:10px;padding:4px 18px}
@@ -453,7 +455,7 @@ p{margin:0}
       <div class="panel" style="display:grid;gap:12px">
         <h3>For family <span class="zh">給家人</span></h3>
         <ul class="tiplist">
-          <li><b>After five strokes, go gently.</b> He may tire quickly, and some days will be harder than others. That's normal. Start with Warm-up or Prayers, keep it short, and finish on a goal he scores. <span class="zh">中過五次風，要慢慢嚟。佢可能好快攰，有啲日子會難啲，係正常嘅。由熱身或者禱文開始，玩短啲，最後一球要入。</span></li>
+          <li><b>After five strokes, go gently.</b> He may tire quickly, and some days will be harder than others. That's normal. Start with Prayers & passages (familiar prayers come easiest), keep it short, and finish on a goal he scores. <span class="zh">中過五次風，要慢慢嚟。佢可能好快攰，有啲日子會難啲，係正常嘅。由禱文開始（熟悉嘅禱文最易講），玩短啲，最後一球要入。</span></li>
           <li><b>Use his stronger hand.</b> He holds the space bar (or the yellow button) while he talks and lets go when he's done. The microphone is only on while it's held. If holding is too hard, Family settings has an optional hands-free mode. <span class="zh">用佢有力嗰隻手：講嘢嗰陣按住空白鍵（或者黃色掣），講完放手。只有按住先會錄音。如果按唔到，可以喺家人設定開「免手」。</span></li>
           <li><b>Little and often.</b> 10–15 minutes once or twice a day works better than one long session. The daily goal on the home screen helps. <span class="zh">少量多次：每日一至兩次，每次十至十五分鐘。</span></li>
           <li><b>Sit him upright, with water nearby.</b> Stop if he is tired, frustrated, coughing or dizzy. <span class="zh">坐直，身邊放杯水。攰、唔開心、咳或者頭暈就停。</span></li>
@@ -565,48 +567,9 @@ p{margin:0}
 
 <script>
 /* ======================= CONTENT ======================= */
-// Stages 1–3: separate English and Cantonese lists ("text|meaning"). Stages 4–5: aligned verses/prayers.
-// (Short words and Two-beat words were removed on 2026-11-14: too easy for him.)
+// Stage 1 Strength verses, Stage 2 Prayers & passages: aligned English/Cantonese lines.
+// Removed as too easy: Short words and Two-beat words (2026-11-14), then Warm-up, Long words and Everyday sentences (2026-11-14).
 const STAGES = [
- {id:'warm', en:'Warm-up', zh:'熱身', about:'Counting, days and hello: familiar words that come easiest. 數字、星期、打招呼。', reward:[100,10,1],
-  lv:{en:[
-   ['One, two, three|一、二、三','Four, five, six|四、五、六','Seven, eight, nine, ten|七、八、九、十','Yes|係','No|唔係'],
-   ['Hello|你好','Good morning|早晨','Thank you|多謝','Bye-bye|拜拜','Amen|亞孟'],
-   ['Monday, Tuesday|星期一、星期二','Wednesday, Thursday|星期三、星期四','Friday, Saturday|星期五、星期六','Sunday|星期日','Happy birthday to you|祝你生日快樂']],
-  zh:[
-   ['一、二、三|One, two, three','四、五、六|Four, five, six','七、八、九、十|Seven, eight, nine, ten','係|Yes','唔係|No'],
-   ['你好|Hello','早晨|Good morning','多謝|Thank you','拜拜|Bye-bye','亞孟|Amen'],
-   ['星期一、星期二|Monday, Tuesday','星期三、星期四|Wednesday, Thursday','星期五、星期六|Friday, Saturday','星期日|Sunday','祝你生日快樂|Happy birthday to you']]}},
- {id:'long', en:'Long words', zh:'長啲嘅字', about:'Three beats or more: banana, wonderful, together. 三個音或以上。', reward:[1000,100,10],
-  lv:{en:[
-   ['banana|香蕉','tomato|番茄','potato|薯仔','broccoli|西蘭花','spaghetti|意粉'],
-   ['beautiful|好靚','wonderful|好好','excellent|好叻','fantastic|好勁','terrific|一流'],
-   ['hospital|醫院','medicine|藥','exercise|運動','therapy|治療','telephone|電話'],
-   ['together|一齊','tomorrow|聽日','yesterday|琴日','afternoon|下晝','remember|記得'],
-   ['America|美國','California|加州','basketball|籃球','volleyball|排球','Olympics|奧運'],
-   ['grandfather|爺爺','grandmother|嫲嫲','family|屋企人','celebration|慶祝','hallelujah|哈利路亞']],
-  zh:[
-   ['叉燒包|BBQ pork bun','菠蘿包|pineapple bun','雞蛋仔|egg waffle','西多士|French toast','魚蛋粉|fish ball noodles'],
-   ['好叻呀|so clever!','好犀利|amazing!','好開心|so happy','好舒服|so comfy','好好味|delicious'],
-   ['大三巴|Ruins of St. Paul\'s','媽閣廟|A-Ma Temple','新馬路|San Ma Lo','粵華中學|Yuet Wah College','舊金山|San Francisco'],
-   ['今日朝早|this morning','聽日見|see you tomorrow','下晝茶|afternoon tea','禮拜日|Sunday','新年快樂|Happy New Year'],
-   ['打籃球|play basketball','踢足球|play soccer','好波呀|great shot!','入咗波|it\'s in!','世界盃|World Cup'],
-   ['我愛你|I love you','好掛住你|I miss you','一家人|one family','乖孫仔|good grandson','唔該晒|thanks so much']]}},
- {id:'sent', en:'Everyday sentences', zh:'日常句子', about:'Things he needs to say every day. 日常要講嘅句子。', reward:[1000,100,10],
-  lv:{en:[
-   ['I want some water.|我想飲水。','I am hungry.|我肚餓。','I need help.|我要幫手。','I am tired.|我好攰。','I feel good today.|我今日好好。'],
-   ['Good morning, Joshua.|早晨，孫仔。','I love you.|我愛你。','Thank you very much.|唔該晒你。','How are you?|你好嗎？','See you tomorrow.|聽日見。'],
-   ['Please help me sit up.|唔該扶我坐起身。','I need the bathroom.|我要去廁所。','It hurts here.|呢度痛。','I am cold.|我好凍。','Please turn on the light.|唔該開燈。'],
-   ['What time is it?|而家幾點？','What is for dinner?|今晚食咩？','I want to go outside.|我想出去行吓。','Let\'s watch TV.|一齊睇電視啦。','Please call my family.|唔該打俾我屋企人。'],
-   ['Pass me the ball.|傳個波俾我。','What a great goal!|好波！','I played soccer at Yuet Wah.|我喺粵華踢波。','Who won the game?|邊隊贏咗？','Let\'s go, team!|加油，加油！'],
-   ['I can do it.|我做得到。','I will try again.|我再試多次。','One more time.|再嚟一次。','I am getting stronger.|我越嚟越強壯。','Every day is better.|一日好過一日。']],
-  zh:[
-   ['我想飲水。|I want some water.','我肚餓。|I am hungry.','我要幫手。|I need help.','我好攰。|I am tired.','我今日好好。|I feel good today.'],
-   ['早晨，孫仔。|Good morning, grandson.','我愛你。|I love you.','唔該晒你。|Thank you very much.','你好嗎？|How are you?','聽日見。|See you tomorrow.'],
-   ['唔該扶我坐起身。|Please help me sit up.','我要去廁所。|I need the bathroom.','呢度痛。|It hurts here.','我好凍。|I am cold.','唔該開燈。|Please turn on the light.'],
-   ['而家幾點？|What time is it?','今晚食咩？|What is for dinner?','我想出去行吓。|I want to go for a walk.','一齊睇電視啦。|Let\'s watch TV.','唔該打俾我屋企人。|Please call my family.'],
-   ['傳個波俾我。|Pass me the ball.','好波！|Great goal!','我喺粵華踢波。|I played soccer at Yuet Wah.','邊隊贏咗？|Who won?','加油，加油！|Let\'s go, team!'],
-   ['我做得到。|I can do it.','我再試多次。|I will try again.','再嚟一次。|One more time.','我越嚟越強壯。|I am getting stronger.','一日好過一日。|Every day is better.']]}},
  {id:'verse', en:'Strength verses', zh:'力量金句', about:'Short Bible verses about courage, peace and healing (New Heart English Bible, or your own wording from Family settings · 和合本). 勇氣、平安、醫治嘅經文。', reward:[1500,150,15], aligned:true,
   lv:[
    [['In the beginning God created the heavens and the earth.','起初，神創造天地。','Genesis 1:1 創世記'],
@@ -709,7 +672,7 @@ function toast(msg,ms=3200){const t=document.createElement('div');t.className='t
 function stageById(id){return STAGES.find(s=>s.id===id);}
 function customItems(){return (S.settings.custom||'').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const [a,b]=l.split('|').map(x=>(x||'').trim());return {en:a||b,zh:b||a};}).filter(x=>x.en&&x.zh);}
 function stageLevelCount(st){if(st.id==='mine'){return Math.ceil(customItems().length/5);}return st.aligned?st.lv.length:st.lv.en.length;}
-function allStages(){const list=[...STAGES];const c=customItems();if(c.length){list.splice(1,0,{id:'mine',en:'My words',zh:'我的字',about:'Words the family added in Family settings. 家人加嘅字。',reward:[100,10,1],open:true});}return list;}
+function allStages(){const list=[...STAGES];const c=customItems();if(c.length){list.push({id:'mine',en:'My words',zh:'我的字',about:'Words the family added in Family settings. 家人加嘅字。',reward:[100,10,1],open:true});}return list;}
 /* the family's own Bible wording, pasted as "Reference | verse"; replaces the built-in English for that verse */
 function verseRef(stageId,lvl,row){if(stageId==='verse')return row[2].replace(/\s*[㐀-鿿].*$/,'').trim();
   if(stageId==='pray'){if(lvl===2||lvl===3)return 'Psalm '+row[2];if(lvl>=5)return row[2];}return null;}
@@ -739,7 +702,7 @@ function isUnlocked(stIdx,l,stages){if(S.settings.unlockAll)return true;const st
 function nextLevelFrom(stageId,lvl){const stages=allStages();const i=stages.findIndex(s=>s.id===stageId);const st=stages[i];
   if(lvl+1<stageLevelCount(st))return {stage:stageId,level:lvl+1};
   for(let j=i+1;j<stages.length;j++){if(stageLevelCount(stages[j])>0)return {stage:stages[j].id,level:0};}return null;}
-function firstOpenLevel(){const stages=allStages();for(let i=0;i<stages.length;i++){const st=stages[i];if(st.open&&st.id==='pray')continue;for(let l=0;l<stageLevelCount(st);l++){if(!isDone(st.id,l)&&isUnlocked(i,l,stages))return {stage:st.id,level:l};}}return {stage:'warm',level:0};}
+function firstOpenLevel(){const stages=allStages();for(const skipOpen of [true,false])for(let i=0;i<stages.length;i++){const st=stages[i];if(skipOpen&&st.open)continue;for(let l=0;l<stageLevelCount(st);l++){if(!isDone(st.id,l)&&isUnlocked(i,l,stages))return {stage:st.id,level:l};}}return {stage:STAGES[0].id,level:0};}
 
 /* syllables / beats */
 function syllEn(word){word=word.toLowerCase().replace(/[^a-z]/g,'');if(!word)return 0;if(word.length<=3)return 1;
@@ -1374,13 +1337,13 @@ $('tbBalls').onclick=()=>{storeTab='balls';confirmId=null;renderStore();};$('tbP
 
 /* ======================= CUP ======================= */
 const CUP_PRIZE={solar:[10000,4000,100],sunday:[1000,100,10],tour:[3000,300,30]};
-const CUP_POOLS=[['long'],['long','sent'],['verse','pray']];
+const CUP_POOLS=[['verse'],['pray'],['verse','pray']];
 const TOUR=[
- {id:'tour-macau',en:'Macau Cup',zh:'澳門盃',place:'yuetwah',night:false,where:'Yuet Wah College, Macau · 澳門粵華中學',pools:[['warm','long'],['long'],['sent']]},
- {id:'tour-america',en:'America Cup',zh:'美國盃',place:'lincoln',night:false,where:'Lincoln Memorial, Washington · 華盛頓林肯紀念堂',pools:[['long'],['sent'],['sent','verse']]},
- {id:'tour-olympic',en:'Olympic Cup',zh:'奧運盃',place:'olympic',night:false,where:'Olympic stadium · 奧運體育場',pools:[['long','sent'],['verse'],['verse']]},
- {id:'tour-starlight',en:'Starlight Cup',zh:'星光盃',place:'park',night:true,where:'Under the stars · 星空下',pools:[['long'],['sent'],['verse','pray']]},
- {id:'tour-galaxy',en:'Galaxy Cup',zh:'銀河盃',place:'alien',night:false,where:'Alien planet · 外星球',pools:[['sent'],['verse'],['pray']]}];
+ {id:'tour-macau',en:'Macau Cup',zh:'澳門盃',place:'yuetwah',night:false,where:'Yuet Wah College, Macau · 澳門粵華中學',pools:[['verse'],['pray'],['verse']]},
+ {id:'tour-america',en:'America Cup',zh:'美國盃',place:'lincoln',night:false,where:'Lincoln Memorial, Washington · 華盛頓林肯紀念堂',pools:[['verse'],['pray'],['verse','pray']]},
+ {id:'tour-olympic',en:'Olympic Cup',zh:'奧運盃',place:'olympic',night:false,where:'Olympic stadium · 奧運體育場',pools:[['verse','pray'],['pray'],['verse']]},
+ {id:'tour-starlight',en:'Starlight Cup',zh:'星光盃',place:'park',night:true,where:'Under the stars · 星空下',pools:[['verse'],['verse','pray'],['pray']]},
+ {id:'tour-galaxy',en:'Galaxy Cup',zh:'銀河盃',place:'alien',night:false,where:'Alien planet · 外星球',pools:[['pray'],['verse'],['pray']]}];
 const SUNDAY_PLACES=['yuetwah','lincoln','olympic','park'];
 function sundayOf(d=new Date()){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-x.getDay());return x;}
 function sundayStatus(now=new Date()){const sd=sundayOf(now);const id='sun-'+todayKey(sd);const nx=new Date(sd);nx.setDate(sd.getDate()+7);return {open:true,id,date:sd,next:nx,done:!!(S.cups[id]&&S.cups[id].done)};}
@@ -1430,7 +1393,8 @@ function renderCup(){stopLoop();const main=$('cupMain'),tour=$('cupTour');main.i
   renderTrophies($('cupTrophies'));}
 
 /* ======================= PROGRESS ======================= */
-function toughItems(lang){return Object.entries(S.items).filter(([k,v])=>v.t>=2&&v.g/v.t<.5&&(!lang||v.lang===lang)).sort((a,b)=>(a[1].g/a[1].t)-(b[1].g/b[1].t)||b[1].t-a[1].t).map(([k,v])=>({text:k.slice(k.indexOf('|')+1),mean:v.mean||'',lang:v.lang,t:v.t,g:v.g}));}
+function currentTexts(){const set=new Set();allStages().forEach(st=>{for(let l=0;l<stageLevelCount(st);l++)['en','zh'].forEach(lg=>{try{getItems(st.id,l,lg).forEach(x=>set.add(x.text));}catch(e){}});});return set;}
+function toughItems(lang){const cur=currentTexts();return Object.entries(S.items).filter(([k,v])=>v.t>=2&&v.g/v.t<.5&&(!lang||v.lang===lang)&&cur.has(k.slice(k.indexOf('|')+1))).sort((a,b)=>(a[1].g/a[1].t)-(b[1].g/b[1].t)||b[1].t-a[1].t).map(([k,v])=>({text:k.slice(k.indexOf('|')+1),mean:v.mean||'',lang:v.lang,t:v.t,g:v.g}));}
 function startTough(){const list=toughItems(S.lang).slice(0,5);if(!list.length){toast('No tough words yet in this language. 呢種語言未有難字。');return;}
   const items=list.map(x=>({text:x.text,mean:x.mean,ref:'Practice 練習'}));startPlay({kind:'tough',items,idx:0,results:items.map(()=>null),tries:items.map(()=>0),sport:S.sport,lang:S.lang},false);}
 $('toughGo').onclick=()=>{ac();startTough();};
